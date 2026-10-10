@@ -1,0 +1,1973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Wisdom of Mountain — The Blessing of the Earth | Sevak IVA</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#7dd3fc; --primary-2:#38bdf8; --accent:#86efac; --accent-2:#fcd34d;
+  --snow:#e0f2fe; --earth:#a16207; --stone:#78716c; --pine:#166534;
+  --mystery:#7c3aed; --sacred:#ff9933; --danger:#ef4444;
+  --bg:#04121c; --bg-2:#082030; --surface:rgba(255,255,255,.04);
+  --glass:rgba(255,255,255,.08); --border:rgba(125,211,252,.22);
+  --text:#f0f9ff; --muted:#c9e2f0;
+  --font-display:'Orbitron',monospace; --font-body:'Inter',sans-serif;
+  --font-serif:'Cormorant Garamond',serif;
+  --backdrop-darkness:0.60; --hero-darkness:0.50; --nature-darkness:0.55;
+  --backdrop-brightness:1.05; --backdrop-saturation:1.15;
+}
+body.bright-mode{
+  --backdrop-darkness:0.32; --hero-darkness:0.28; --nature-darkness:0.32;
+  --backdrop-brightness:1.22; --backdrop-saturation:1.35;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.75;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background .6s ease}
+body.no-scroll{overflow:hidden}
+#particleCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+.c-snow{color:#bae6fd;font-weight:800;text-shadow:0 0 16px rgba(186,230,253,.85),0 0 32px rgba(56,189,248,.5)}
+.c-green{color:#86efac;font-weight:800;text-shadow:0 0 16px rgba(134,239,172,.85),0 0 32px rgba(34,197,94,.5)}
+.c-gold{color:#fcd34d;font-weight:800;text-shadow:0 0 16px rgba(252,211,77,.9),0 0 32px rgba(250,204,21,.5)}
+.c-violet{color:#c4b5fd;font-weight:800;text-shadow:0 0 16px rgba(196,181,253,.85),0 0 32px rgba(124,58,237,.5)}
+.c-saffron{color:#fdba74;font-weight:800;text-shadow:0 0 16px rgba(253,186,116,.85),0 0 32px rgba(255,153,51,.5)}
+.c-white{color:#ffffff;font-weight:800;text-shadow:0 0 14px rgba(255,255,255,.75),0 0 30px rgba(125,211,252,.4)}
+.c-mystery{color:#d8b4fe;font-weight:800;text-shadow:0 0 16px rgba(216,180,254,.9),0 0 32px rgba(168,85,247,.55)}
+
+/* ── NATURE BACKDROP (MOUNTAIN) ── */
+.nature-backdrop{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    linear-gradient(180deg,
+      rgba(4,18,28,var(--backdrop-darkness)) 0%,
+      rgba(4,18,28,calc(var(--backdrop-darkness) - 0.08)) 25%,
+      rgba(4,18,28,calc(var(--backdrop-darkness) - 0.04)) 55%,
+      rgba(4,18,28,var(--backdrop-darkness)) 100%),
+    radial-gradient(circle at 20% 20%,rgba(125,211,252,.18),transparent 40%),
+    radial-gradient(circle at 80% 60%,rgba(124,58,237,.14),transparent 45%),
+    radial-gradient(circle at 50% 85%,rgba(134,239,172,.10),transparent 50%),
+    url('https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=1920&q=85') center/cover no-repeat;
+  filter:brightness(var(--backdrop-brightness)) saturate(var(--backdrop-saturation));
+  transition:filter .6s ease,background .6s ease;
+}
+@media(max-width:760px){.nature-backdrop{background-position:center}}
+
+/* ── NAVBAR ── */
+.navbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 28px;
+  background:rgba(4,18,28,.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-brand{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--font-display);font-weight:900;font-size:1.05rem;letter-spacing:2px;
+  background:linear-gradient(135deg,var(--snow),var(--primary) 50%,var(--accent-2));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 14px rgba(125,211,252,.6));
+}
+.nav-links{display:flex;gap:22px;font-size:.86rem;font-weight:700}
+.nav-links a{color:var(--muted);transition:color .3s;position:relative}
+.nav-links a:hover{color:#bae6fd;text-shadow:0 0 14px rgba(186,230,253,.75)}
+.nav-links a::after{content:'';position:absolute;left:0;bottom:-6px;width:0;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .3s ease;border-radius:2px}
+.nav-links a:hover::after{width:100%}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.nav-brightness{
+  width:38px;height:38px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,rgba(252,211,77,.18),rgba(125,211,252,.12));
+  border:1px solid rgba(252,211,77,.4);color:var(--accent-2);
+  font-size:1.05rem;transition:all .3s ease;
+}
+.nav-brightness:hover{transform:scale(1.08) rotate(15deg);box-shadow:0 0 20px rgba(252,211,77,.5)}
+.nav-brightness.active{background:linear-gradient(135deg,rgba(252,211,77,.35),rgba(125,211,252,.2));color:#fff;box-shadow:0 0 25px rgba(252,211,77,.6)}
+.nav-sevak{
+  display:flex;align-items:center;gap:8px;padding:9px 18px;border-radius:24px;cursor:pointer;
+  background:linear-gradient(135deg,rgba(125,211,252,.2),rgba(124,58,237,.15));
+  border:1px solid rgba(125,211,252,.4);color:var(--text);
+  font-family:var(--font-body);font-weight:600;font-size:.82rem;letter-spacing:.5px;
+  transition:all .3s ease;
+}
+.nav-sevak:hover{background:linear-gradient(135deg,rgba(125,211,252,.35),rgba(124,58,237,.25));box-shadow:0 0 25px rgba(125,211,252,.35);transform:translateY(-1px)}
+@media(max-width:768px){
+  .navbar{padding:12px 16px}
+  .nav-links{display:none}
+  .nav-brand{font-size:.82rem;letter-spacing:1px}
+  .nav-sevak{padding:7px 12px;font-size:.7rem}
+  .nav-brightness{width:34px;height:34px;font-size:.95rem}
+}
+
+/* ── HERO — MOUNTAINS AT DAWN ── */
+.hero{
+  position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;
+  background:
+    radial-gradient(1000px 600px at 20% 30%,rgba(125,211,252,.22),transparent 65%),
+    radial-gradient(900px 500px at 80% 70%,rgba(124,58,237,.18),transparent 60%),
+    radial-gradient(700px 500px at 50% 100%,rgba(252,211,77,.1),transparent 70%);
+}
+.hero::before{
+  content:'';position:absolute;inset:0;z-index:-1;
+  background:
+    linear-gradient(180deg,
+      rgba(4,18,28,var(--hero-darkness)) 0%,
+      rgba(4,18,28,calc(var(--hero-darkness) + 0.35)) 55%,
+      rgba(4,18,28,.92) 80%,
+      var(--bg) 100%),
+    url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=85') center/cover no-repeat;
+  filter:brightness(var(--backdrop-brightness)) saturate(var(--backdrop-saturation));
+  transition:filter .6s ease,background .6s ease;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:24px;margin-bottom:24px;
+  background:rgba(125,211,252,.18);border:1px solid rgba(125,211,252,.5);
+  font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:#bae6fd;font-weight:800;
+  backdrop-filter:blur(10px);
+  text-shadow:0 0 16px rgba(186,230,253,.7),0 0 30px rgba(56,189,248,.4);
+}
+.hero h1{
+  font-family:var(--font-display);font-weight:900;
+  font-size:clamp(2rem,6vw,4.6rem);letter-spacing:4px;line-height:1.08;
+  background:linear-gradient(135deg,#ffffff 5%,#bae6fd 30%,#86efac 60%,#fcd34d 90%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:14px;
+  filter:drop-shadow(0 4px 20px rgba(0,0,0,.55)) drop-shadow(0 0 30px rgba(125,211,252,.5));
+  animation:heroIn 1.2s cubic-bezier(.2,.8,.2,1) both;
+}
+.hero h1 small{display:block;font-size:.42em;letter-spacing:5px;margin-top:8px;color:#86efac;-webkit-text-fill-color:#86efac;text-shadow:0 0 18px rgba(134,239,172,.7)}
+.hero-sub{
+  font-family:var(--font-serif);font-size:clamp(1.1rem,2.2vw,1.55rem);
+  font-style:italic;color:#ffffff;max-width:820px;margin-bottom:22px;
+  filter:drop-shadow(0 2px 12px rgba(0,0,0,.7)) drop-shadow(0 0 22px rgba(186,230,253,.35));
+  animation:heroIn 1.2s .15s cubic-bezier(.2,.8,.2,1) both;
+}
+.hero-icons{display:flex;gap:24px;justify-content:center;margin:6px 0 22px;flex-wrap:wrap;animation:heroIn 1.2s .22s cubic-bezier(.2,.8,.2,1) both}
+.hero-icon-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
+.hero-icon{
+  width:96px;height:96px;border-radius:50%;object-fit:cover;
+  border:2px solid rgba(186,230,253,.7);
+  box-shadow:0 0 40px rgba(125,211,252,.55),0 0 80px rgba(134,239,172,.35),inset 0 0 30px rgba(0,0,0,.3);
+  transition:transform .5s ease;
+}
+.hero-icon:hover{transform:scale(1.08) rotate(2deg)}
+.hero-icon-wrap .ilabel{
+  font-family:var(--font-display);font-size:.66rem;letter-spacing:3px;color:#bae6fd;
+  text-transform:uppercase;font-weight:900;text-shadow:0 0 14px rgba(186,230,253,.85);
+}
+.hero-quote{
+  font-family:var(--font-serif);font-style:italic;
+  font-size:clamp(.92rem,1.5vw,1.1rem);color:#ffe6a8;
+  max-width:700px;margin-bottom:30px;padding:14px 24px;border-radius:14px;
+  background:rgba(4,18,28,.55);backdrop-filter:blur(10px);
+  border:1px solid rgba(252,211,77,.45);
+  filter:drop-shadow(0 2px 10px rgba(0,0,0,.6)) drop-shadow(0 0 22px rgba(252,211,77,.4));
+  text-shadow:0 0 20px rgba(255,230,168,.7);
+  animation:heroIn 1.2s .3s cubic-bezier(.2,.8,.2,1) both;
+  transition:opacity .6s ease;min-height:60px;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+}
+.hero-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:44px;animation:heroIn 1.2s .38s cubic-bezier(.2,.8,.2,1) both}
+.hero-tags span{padding:9px 20px;border-radius:24px;font-size:.8rem;font-weight:700;background:rgba(4,18,28,.55);border:1px solid rgba(125,211,252,.4);color:#f0f9ff;backdrop-filter:blur(10px);text-shadow:0 0 14px rgba(186,230,253,.5)}
+.hero-cta{
+  display:inline-flex;align-items:center;gap:12px;padding:16px 38px;border-radius:40px;cursor:pointer;border:none;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#031410;font-family:var(--font-body);font-weight:800;font-size:1rem;letter-spacing:1px;
+  text-transform:uppercase;box-shadow:0 12px 40px rgba(125,211,252,.55);
+  transition:all .35s cubic-bezier(.2,.8,.2,1);
+  animation:heroIn 1.2s .45s cubic-bezier(.2,.8,.2,1) both;
+}
+.hero-cta:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 20px 55px rgba(125,211,252,.75)}
+.hero-scroll{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  color:#e0f2fe;font-size:.72rem;letter-spacing:3px;text-transform:uppercase;
+  animation:bounceDown 2.4s ease-in-out infinite;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,.8));
+  text-shadow:0 0 14px rgba(186,230,253,.7);font-weight:700;
+}
+@keyframes heroIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounceDown{0%,100%{transform:translateX(-50%) translateY(0);opacity:.6}50%{transform:translateX(-50%) translateY(8px);opacity:1}}
+
+/* ── SECTION BASE ── */
+.section{position:relative;z-index:1;padding:90px 24px;max-width:1100px;margin:0 auto}
+.section-head{text-align:center;margin-bottom:56px}
+.section-num{
+  display:inline-block;font-family:var(--font-display);font-size:.82rem;letter-spacing:5px;
+  color:#bae6fd;margin-bottom:16px;font-weight:900;
+  text-shadow:0 0 22px rgba(186,230,253,.95),0 0 50px rgba(56,189,248,.7),0 0 90px rgba(56,189,248,.4);
+}
+.section h2{
+  font-family:var(--font-serif);font-weight:700;
+  font-size:clamp(2rem,4.8vw,3.4rem);letter-spacing:.5px;line-height:1.15;margin-bottom:16px;
+  filter:drop-shadow(0 3px 15px rgba(0,0,0,.5)) drop-shadow(0 0 30px rgba(125,211,252,.35));
+  background:linear-gradient(135deg,#ffffff 10%,#e0f2fe 40%,#ffffff 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.section h2 em{
+  font-style:italic;
+  background:linear-gradient(135deg,#bae6fd 0%,#86efac 50%,#fcd34d 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 24px rgba(186,230,253,.9)) drop-shadow(0 0 50px rgba(125,211,252,.5));
+}
+.section-sub{font-size:1.1rem;color:#ecf9ff;max-width:680px;margin:0 auto;font-family:var(--font-body);font-weight:600;text-shadow:0 0 18px rgba(186,230,253,.4),0 0 2px rgba(0,0,0,.8)}
+.lead{
+  font-family:var(--font-serif);font-size:1.22rem;line-height:1.9;
+  color:#f0f9ff;font-style:italic;max-width:820px;margin:0 auto 40px;text-align:center;
+  filter:drop-shadow(0 2px 10px rgba(0,0,0,.5)) drop-shadow(0 0 22px rgba(186,230,253,.2));
+  text-shadow:0 0 20px rgba(186,230,253,.3);
+}
+.lead strong{color:#bae6fd;font-style:normal;font-weight:800;text-shadow:0 0 18px rgba(186,230,253,.75),0 0 40px rgba(56,189,248,.4)}
+.wisdom-box{
+  margin:30px auto 40px;max-width:880px;padding:28px 32px;border-radius:20px;
+  background:radial-gradient(500px 200px at 50% 0%,rgba(125,211,252,.24),transparent 70%),linear-gradient(160deg,rgba(4,18,28,.68),rgba(4,18,28,.5));
+  border:1px solid rgba(125,211,252,.55);
+  font-family:var(--font-serif);font-style:italic;font-size:1.15rem;
+  color:#f0f9ff;line-height:1.95;text-align:center;
+  backdrop-filter:blur(14px);
+  filter:drop-shadow(0 10px 30px rgba(0,0,0,.4)) drop-shadow(0 0 40px rgba(125,211,252,.2));
+  text-shadow:0 0 14px rgba(186,230,253,.4);
+}
+.wisdom-box strong{color:#86efac;font-style:normal;font-weight:800;text-shadow:0 0 20px rgba(134,239,172,.85),0 0 40px rgba(34,197,94,.5)}
+.wisdom-box .wlabel{
+  display:block;font-family:var(--font-display);font-style:normal;font-size:.74rem;letter-spacing:4px;
+  color:#bae6fd;margin-bottom:14px;text-transform:uppercase;font-weight:900;
+  text-shadow:0 0 22px rgba(186,230,253,.95),0 0 45px rgba(56,189,248,.55);
+}
+.quote-rotator{
+  margin:36px auto 44px;max-width:800px;padding:28px 32px;border-radius:22px;text-align:center;
+  background:radial-gradient(500px 200px at 50% 0%,rgba(124,58,237,.22),transparent 70%),linear-gradient(160deg,rgba(4,18,28,.68),rgba(4,18,28,.5));
+  border:1px solid rgba(124,58,237,.45);backdrop-filter:blur(14px);
+  box-shadow:0 20px 50px rgba(0,0,0,.4),0 0 50px rgba(124,58,237,.25);
+  position:relative;overflow:hidden;
+}
+.quote-rotator::before{content:'❝';position:absolute;top:-20px;left:16px;font-family:var(--font-serif);font-size:6rem;color:rgba(186,230,253,.22);line-height:1}
+.quote-rotator::after{content:'❞';position:absolute;bottom:-40px;right:16px;font-family:var(--font-serif);font-size:6rem;color:rgba(134,239,172,.22);line-height:1}
+.quote-rotator .quote-text{
+  font-family:var(--font-serif);font-style:italic;font-size:clamp(1.12rem,2vw,1.38rem);
+  color:#ffffff;line-height:1.9;transition:opacity .6s ease;min-height:70px;position:relative;z-index:1;
+  text-shadow:0 0 18px rgba(186,230,253,.45),0 0 40px rgba(125,211,252,.22);
+}
+.quote-rotator .quote-author{
+  display:block;margin-top:14px;font-family:var(--font-display);font-size:.8rem;letter-spacing:3px;
+  color:#bae6fd;text-transform:uppercase;font-weight:900;
+  text-shadow:0 0 18px rgba(186,230,253,.85),0 0 40px rgba(125,211,252,.5);
+  transition:opacity .6s ease;position:relative;z-index:1;
+}
+.quote-rotator .quote-dots{display:flex;gap:8px;justify-content:center;margin-top:16px;position:relative;z-index:1}
+.quote-rotator .quote-dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);transition:all .4s ease;cursor:pointer}
+.quote-rotator .quote-dots span.active{background:linear-gradient(135deg,var(--primary),var(--accent));width:24px;border-radius:4px;box-shadow:0 0 14px rgba(125,211,252,.75)}
+
+/* ── WHEEL ── */
+#wheel{padding-top:60px;background:radial-gradient(700px 500px at 50% 50%,rgba(125,211,252,.18),transparent 70%)}
+.wheel-layout{display:grid;grid-template-columns:1.1fr 1fr;gap:50px;align-items:center;margin-top:30px}
+@media(max-width:820px){.wheel-layout{grid-template-columns:1fr;gap:30px}}
+.wheel{position:relative;width:100%;aspect-ratio:1;max-width:460px;margin:0 auto}
+.wheel::before{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(125,211,252,.22),transparent 60%),radial-gradient(circle at 70% 70%,rgba(124,58,237,.22),transparent 60%),radial-gradient(circle at 50% 50%,rgba(252,211,77,.2),transparent 75%);animation:wheelPulse 4s ease-in-out infinite}
+@keyframes wheelPulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.07);opacity:1}}
+.wheel-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:130px;height:130px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 30%,rgba(125,211,252,.6),rgba(134,239,172,.4) 50%,rgba(252,211,77,.5));box-shadow:0 0 70px rgba(125,211,252,.65),0 0 140px rgba(124,58,237,.4),inset 0 0 40px rgba(255,255,255,.15);border:1px solid rgba(186,230,253,.4);z-index:2;animation:wheelCenterFloat 5s ease-in-out infinite}
+.wheel-center .wc-emoji{font-size:2.2rem;line-height:1}
+.wheel-center .wc-label{font-family:var(--font-display);font-size:.62rem;letter-spacing:2px;color:#f0f9ff;margin-top:4px;font-weight:900;text-shadow:0 0 14px rgba(0,0,0,.7)}
+@keyframes wheelCenterFloat{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-52%) scale(1.04)}}
+.wheel-center::after{content:'';position:absolute;inset:-14px;border-radius:50%;border:1px dashed rgba(186,230,253,.6);animation:spin 30s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.wheel-node{position:absolute;transform:translate(-50%,-50%);padding:9px 14px;border-radius:22px;cursor:pointer;background:rgba(6,24,36,.94);backdrop-filter:blur(10px);border:1px solid var(--border);font-family:var(--font-body);font-weight:800;font-size:.74rem;letter-spacing:.5px;white-space:nowrap;transition:all .35s cubic-bezier(.2,.8,.2,1);z-index:3;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.wheel-node .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:middle}
+.wheel-node[data-region="blessing"]{color:#86efac;border-color:rgba(134,239,172,.85);text-shadow:0 0 16px rgba(134,239,172,.9)}
+.wheel-node[data-region="blessing"] .dot{background:#86efac;box-shadow:0 0 16px #86efac}
+.wheel-node[data-region="mystery"]{color:#d8b4fe;border-color:rgba(216,180,254,.85);text-shadow:0 0 16px rgba(216,180,254,.9)}
+.wheel-node[data-region="mystery"] .dot{background:#d8b4fe;box-shadow:0 0 16px #d8b4fe}
+.wheel-node[data-region="beauty"]{color:#fcd34d;border-color:rgba(252,211,77,.85);text-shadow:0 0 16px rgba(252,211,77,.9)}
+.wheel-node[data-region="beauty"] .dot{background:#fcd34d;box-shadow:0 0 16px #fcd34d}
+.wheel-node[data-region="meditation"]{color:#bae6fd;border-color:rgba(186,230,253,.85);text-shadow:0 0 16px rgba(186,230,253,.9)}
+.wheel-node[data-region="meditation"] .dot{background:#bae6fd;box-shadow:0 0 16px #bae6fd}
+.wheel-node[data-region="aravali"]{color:#fdba74;border-color:rgba(253,186,116,.85);text-shadow:0 0 16px rgba(253,186,116,.9)}
+.wheel-node[data-region="aravali"] .dot{background:#fdba74;box-shadow:0 0 16px #fdba74}
+.wheel-node[data-region="devbhoomi"]{color:#ffffff;border-color:rgba(255,255,255,.75);text-shadow:0 0 16px rgba(255,255,255,.9)}
+.wheel-node[data-region="devbhoomi"] .dot{background:#ffffff;box-shadow:0 0 16px #ffffff}
+.wheel-node:hover,.wheel-node.active{background:rgba(255,255,255,.18);box-shadow:0 0 35px currentColor,0 0 70px currentColor;transform:translate(-50%,-50%) scale(1.16);border-color:#fff;color:#ffffff;text-shadow:0 0 24px #ffffff}
+.wheel-info{padding:34px 32px;border-radius:22px;background:rgba(4,18,28,.72);border:1px solid rgba(125,211,252,.28);backdrop-filter:blur(16px);min-height:300px;transition:all .4s cubic-bezier(.2,.8,.2,1);box-shadow:0 15px 40px rgba(0,0,0,.4),0 0 50px rgba(125,211,252,.18)}
+.wheel-info h3{font-family:var(--font-serif);font-size:1.7rem;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,#bae6fd 0%,#86efac 60%,#fcd34d 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.5px;filter:drop-shadow(0 0 22px rgba(186,230,253,.75)) drop-shadow(0 0 44px rgba(125,211,252,.4))}
+.wheel-info .role{font-size:.76rem;letter-spacing:3px;text-transform:uppercase;color:#bae6fd;margin-bottom:18px;font-weight:900;text-shadow:0 0 18px rgba(186,230,253,.85),0 0 36px rgba(125,211,252,.5)}
+.wheel-info p{color:#ecf9ff;font-size:1.02rem;line-height:1.95;font-weight:500;text-shadow:0 0 14px rgba(186,230,253,.2)}
+.wheel-info p strong{color:#fff;font-weight:800}
+.wheel-info .pillar-tag{display:inline-block;margin-top:16px;padding:7px 14px;border-radius:20px;background:linear-gradient(135deg,rgba(252,211,77,.28),rgba(125,211,252,.2));border:1px solid rgba(252,211,77,.7);color:#ffe9b8;font-size:.74rem;font-weight:900;letter-spacing:1px;text-transform:uppercase;text-shadow:0 0 16px rgba(255,230,168,.85)}
+
+/* ── PILLAR GRID ── */
+.pillar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:20px}
+.pillar-card{position:relative;padding:34px 22px;border-radius:20px;cursor:pointer;background:rgba(4,18,28,.65);border:1px solid var(--border);text-align:center;transition:all .4s cubic-bezier(.2,.8,.2,1);overflow:hidden;backdrop-filter:blur(12px)}
+.pillar-card::before{content:'';position:absolute;inset:0;opacity:0;background:linear-gradient(135deg,rgba(125,211,252,.22),rgba(124,58,237,.18));transition:opacity .4s ease}
+.pillar-card:hover{transform:translateY(-8px);border-color:var(--primary);box-shadow:0 20px 45px rgba(0,0,0,.5),0 0 50px rgba(125,211,252,.4)}
+.pillar-card:hover::before{opacity:1}
+.pillar-card>*{position:relative;z-index:1}
+.pillar-icon{font-size:2.6rem;margin-bottom:14px;display:block;filter:drop-shadow(0 0 18px rgba(186,230,253,.6))}
+.pillar-card h3{font-family:var(--font-display);font-size:1.02rem;font-weight:900;letter-spacing:1.5px;margin-bottom:10px;background:linear-gradient(135deg,#ffffff 10%,#bae6fd 50%,#86efac 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 18px rgba(186,230,253,.7))}
+.pillar-card p{font-size:.88rem;color:#ecf9ff;line-height:1.7;font-weight:500;text-shadow:0 0 12px rgba(186,230,253,.2)}
+.pillar-card .pillar-sanskrit{display:block;margin-top:12px;font-family:var(--font-serif);font-style:italic;color:#bae6fd;font-size:1rem;font-weight:600;text-shadow:0 0 16px rgba(186,230,253,.75),0 0 32px rgba(125,211,252,.4)}
+
+/* ── PILLAR SECTIONS ── */
+.pillar-section{max-width:1100px;padding-top:80px;padding-bottom:80px;border-top:1px solid var(--border)}
+.pillar-header{text-align:center;margin-bottom:50px}
+.pillar-header .num{font-family:var(--font-display);font-size:.85rem;letter-spacing:5px;color:#bae6fd;font-weight:900;text-shadow:0 0 22px rgba(186,230,253,.95),0 0 50px rgba(125,211,252,.65)}
+.pillar-header h2{margin-top:12px}
+.pillar-header .sub{font-family:var(--font-serif);font-style:italic;font-size:1.22rem;color:#ecf9ff;margin-top:10px;font-weight:600;text-shadow:0 0 18px rgba(186,230,253,.4),0 0 2px rgba(0,0,0,.8)}
+
+.practice{display:grid;grid-template-columns:1fr 1.2fr;gap:36px;align-items:center;margin-bottom:60px;padding:32px;border-radius:22px;background:rgba(4,18,28,.65);border:1px solid var(--border);transition:all .4s ease;backdrop-filter:blur(12px)}
+.practice:hover{border-color:rgba(186,230,253,.55);box-shadow:0 15px 50px rgba(0,0,0,.5),0 0 40px rgba(125,211,252,.25)}
+.practice.reverse{grid-template-columns:1.2fr 1fr}
+.practice.reverse .practice-media{order:2}
+@media(max-width:820px){.practice,.practice.reverse{grid-template-columns:1fr;gap:22px;padding:22px}.practice.reverse .practice-media{order:0}}
+.practice-media{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:4/3;background:rgba(0,0,0,.4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.practice-media img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.practice:hover .practice-media img{transform:scale(1.05)}
+.practice-media::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 60%,rgba(4,18,28,.5))}
+.practice-media .img-badge{position:absolute;top:12px;left:12px;z-index:2;padding:6px 12px;border-radius:20px;font-size:.7rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;background:rgba(4,18,28,.88);backdrop-filter:blur(10px);border:1px solid rgba(186,230,253,.7);color:#bae6fd;text-shadow:0 0 14px rgba(186,230,253,.85)}
+.practice-body h3{font-family:var(--font-serif);font-size:1.72rem;font-weight:700;margin-bottom:8px;letter-spacing:.3px;background:linear-gradient(135deg,#ffffff 10%,#bae6fd 60%,#86efac 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 20px rgba(186,230,253,.6))}
+.practice-body h3 .sanskrit{font-style:italic;font-size:1.15rem;font-weight:600;display:block;margin-top:2px;background:linear-gradient(135deg,#bae6fd,#86efac);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 16px rgba(186,230,253,.85))}
+.practice-body .desc{font-size:1rem;color:#f0f9ff;margin:14px 0 18px;line-height:1.9;font-weight:500}
+.practice-body .desc strong{color:#bae6fd;font-weight:800;text-shadow:0 0 16px rgba(186,230,253,.7)}
+.practice-body ul{list-style:none;margin:14px 0}
+.practice-body ul li{position:relative;padding-left:26px;margin-bottom:10px;font-size:.95rem;color:#ecf9ff;font-weight:500;line-height:1.75}
+.practice-body ul li::before{content:'🏔️';position:absolute;left:0;color:#bae6fd;font-weight:800;text-shadow:0 0 12px rgba(186,230,253,.95)}
+.practice-body ul li strong{color:#ffffff;font-weight:800}
+
+/* ── ICON GALLERY ── */
+.icon-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:30px 0}
+.icon-gallery figure{margin:0;border-radius:18px;overflow:hidden;position:relative;border:1px solid rgba(186,230,253,.3);background:rgba(0,0,0,.35);aspect-ratio:3/4;box-shadow:0 18px 50px rgba(0,0,0,.4),0 0 30px rgba(125,211,252,.15)}
+.icon-gallery img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease,filter .7s ease}
+.icon-gallery figure:hover img{transform:scale(1.06);filter:saturate(1.15) brightness(1.05)}
+.icon-gallery figcaption{position:absolute;left:10px;right:10px;bottom:10px;padding:8px 10px;border-radius:12px;background:rgba(4,18,28,.78);backdrop-filter:blur(8px);font-size:.74rem;letter-spacing:1.5px;text-transform:uppercase;color:#bae6fd;text-align:center;font-weight:800;text-shadow:0 0 12px rgba(186,230,253,.7)}
+@media(max-width:760px){.icon-gallery{grid-template-columns:repeat(2,1fr)}}
+
+/* ── NATURE GALLERY ── */
+.nature-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 42px}
+.nature-gallery figure{margin:0;min-height:160px;border-radius:18px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.28);box-shadow:0 18px 50px rgba(0,0,0,.3),0 0 30px rgba(125,211,252,.12)}
+.nature-gallery img{width:100%;height:100%;min-height:160px;object-fit:cover;transition:transform .6s ease,filter .6s ease}
+.nature-gallery figure:hover img{transform:scale(1.06);filter:saturate(1.2) brightness(1.1)}
+.nature-gallery figcaption{position:absolute;left:10px;right:10px;bottom:10px;padding:7px 10px;border-radius:12px;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);font-size:.72rem;letter-spacing:1px;text-transform:uppercase;color:#ffffff;text-align:center;font-weight:700;text-shadow:0 0 12px rgba(186,230,253,.5)}
+@media(max-width:760px){.nature-gallery{grid-template-columns:repeat(2,1fr)}.nature-gallery figure,.nature-gallery img{min-height:120px}}
+
+/* ── DEVOTIONAL BANNER ── */
+.devotional-banner{position:relative;margin:44px 0;border-radius:24px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid rgba(186,230,253,.7);box-shadow:0 25px 70px rgba(0,0,0,.55),0 0 90px rgba(125,211,252,.35);background:linear-gradient(135deg,rgba(125,211,252,.16),rgba(124,58,237,.1))}
+.devotional-banner .dev-img{position:relative;overflow:hidden;min-height:340px}
+.devotional-banner .dev-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
+.devotional-banner:hover .dev-img img{transform:scale(1.05)}
+.devotional-banner .dev-copy{padding:44px 38px;display:flex;flex-direction:column;justify-content:center}
+.devotional-banner .dev-copy h3{font-family:var(--font-display);font-size:1.5rem;letter-spacing:3px;color:#bae6fd;margin-bottom:16px;font-weight:900;text-shadow:0 0 30px rgba(186,230,253,.95),0 0 65px rgba(125,211,252,.65)}
+.devotional-banner .dev-copy .shloka{font-family:var(--font-serif);font-style:italic;font-size:1.45rem;color:#f0f9ff;line-height:1.85;margin-bottom:20px;font-weight:600;text-shadow:0 0 22px rgba(186,230,253,.65)}
+.devotional-banner .dev-copy p{font-size:1rem;color:#ecf9ff;line-height:1.95;font-weight:500;text-shadow:0 0 14px rgba(186,230,253,.25)}
+.devotional-banner .dev-copy p strong{color:#ffffff;font-weight:800}
+@media(max-width:820px){.devotional-banner{grid-template-columns:1fr}.devotional-banner .dev-img{min-height:280px}.devotional-banner .dev-copy{padding:28px 24px}}
+
+/* ── DETERMINATION BOX ── */
+.determination-box{margin-top:50px;padding:44px 36px 38px;border-radius:26px;text-align:center;background:radial-gradient(700px 340px at 50% 0%,rgba(125,211,252,.28),transparent 70%),radial-gradient(600px 300px at 50% 100%,rgba(124,58,237,.2),transparent 70%),linear-gradient(160deg,rgba(4,18,28,.78),rgba(4,18,28,.55));border:1px solid rgba(125,211,252,.6);position:relative;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,.55),0 0 80px rgba(125,211,252,.25);backdrop-filter:blur(14px)}
+.det-mountain{width:170px;height:170px;margin:0 auto 22px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;animation:mountainFloat 6s ease-in-out infinite}
+.det-mountain::before{content:'';position:absolute;inset:-16px;border-radius:50%;background:radial-gradient(circle,rgba(125,211,252,.35),transparent 70%);filter:blur(12px);z-index:0}
+.det-mountain::after{content:'';position:absolute;inset:-14px;border-radius:50%;border:1px dashed rgba(186,230,253,.6);animation:spin 40s linear infinite;z-index:2;pointer-events:none}
+.det-mountain img{width:170px;height:170px;border-radius:50%;object-fit:cover;display:block;position:relative;z-index:1;box-shadow:0 0 60px rgba(125,211,252,.8),0 0 120px rgba(124,58,237,.5),inset -20px -20px 40px rgba(0,0,0,.55);border:1px solid rgba(186,230,253,.7)}
+@keyframes mountainFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.determination-box h3{font-family:var(--font-display);font-size:1.5rem;font-weight:900;margin-bottom:20px;color:#bae6fd;letter-spacing:4px;text-transform:uppercase;text-shadow:0 0 30px rgba(186,230,253,.95),0 0 65px rgba(125,211,252,.6)}
+.determination-box .det-tag{display:inline-block;margin-bottom:16px;padding:6px 16px;border-radius:20px;background:rgba(125,211,252,.28);border:1px solid rgba(125,211,252,.7);color:#bae6fd;font-size:.74rem;letter-spacing:3px;font-weight:900;text-transform:uppercase;text-shadow:0 0 16px rgba(186,230,253,.85)}
+.det-carousel{display:flex;align-items:center;gap:18px;justify-content:center;margin-top:22px}
+.det-nav{width:46px;height:46px;border-radius:50%;cursor:pointer;flex-shrink:0;background:linear-gradient(135deg,rgba(125,211,252,.2),rgba(124,58,237,.14));border:1px solid rgba(125,211,252,.65);color:#bae6fd;font-size:1.15rem;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .3s ease}
+.det-nav:hover{background:linear-gradient(135deg,rgba(125,211,252,.4),rgba(124,58,237,.25));transform:scale(1.1);box-shadow:0 0 30px rgba(125,211,252,.7);color:#fff}
+.det-nav:active{transform:scale(.95)}
+@media(max-width:640px){.det-carousel{gap:10px}.det-nav{width:40px;height:40px;font-size:1rem}}
+.determination-box p#determinationQuote{flex:1;font-family:var(--font-serif);font-size:1.2rem;font-style:italic;color:#f0f9ff;line-height:2.05;margin:0;text-align:center;transition:opacity .55s ease;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 4px;text-shadow:0 0 16px rgba(186,230,253,.45)}
+.determination-box p#determinationQuote strong{color:#ffffff;font-style:normal;font-weight:800;text-shadow:0 0 22px rgba(186,230,253,.85),0 0 44px rgba(125,211,252,.55)}
+.det-dots{display:flex;gap:8px;justify-content:center;margin-top:20px}
+.det-dots span{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:all .4s ease}
+.det-dots span.active{background:linear-gradient(135deg,var(--accent-2),var(--primary));width:26px;border-radius:5px;box-shadow:0 0 18px rgba(125,211,252,.8)}
+
+/* ── FOOTER ── */
+footer{position:relative;z-index:1;padding:50px 24px 40px;text-align:center;border-top:1px solid var(--border);background:rgba(0,0,0,.35);backdrop-filter:blur(10px)}
+footer .foot-brand{font-family:var(--font-display);font-weight:900;letter-spacing:4px;font-size:1.15rem;margin-bottom:14px;background:linear-gradient(135deg,var(--primary),var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 16px rgba(125,211,252,.55))}
+footer .foot-tag{font-family:var(--font-serif);font-style:italic;color:#ecf9ff;margin-bottom:22px;font-size:1.05rem;font-weight:500;text-shadow:0 0 14px rgba(186,230,253,.4)}
+footer .foot-links{display:flex;flex-wrap:wrap;justify-content:center;gap:22px;font-size:.86rem;color:#c9e2f0;margin-bottom:22px;font-weight:600}
+footer .foot-links a{transition:color .3s}
+footer .foot-links a:hover{color:#bae6fd;text-shadow:0 0 14px rgba(186,230,253,.7)}
+footer .foot-credit{font-size:.84rem;color:#b8d4e5;letter-spacing:.5px;max-width:680px;margin:0 auto;line-height:1.8}
+footer .foot-credit strong{color:#bae6fd;text-shadow:0 0 14px rgba(186,230,253,.7)}
+
+/* ── SEVAK ── */
+.sevak-orb{position:fixed;bottom:24px;right:24px;z-index:200;width:68px;height:68px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.8rem;background:radial-gradient(circle at 30% 30%,rgba(125,211,252,.9),rgba(134,239,172,.6) 50%,rgba(124,58,237,.5));box-shadow:0 0 40px rgba(125,211,252,.6),0 0 80px rgba(124,58,237,.3);transition:all .35s cubic-bezier(.2,.8,.2,1);border:1px solid rgba(255,255,255,.2)}
+.sevak-orb:hover{transform:scale(1.08)}
+.sevak-orb::after{content:'';position:absolute;inset:-8px;border-radius:50%;border:2px solid rgba(125,211,252,.5);animation:sevakPulse 2s ease-out infinite}
+@keyframes sevakPulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.5);opacity:0}}
+.sevak-orb.active{background:radial-gradient(circle at 30% 30%,rgba(252,211,77,.9),rgba(124,58,237,.6) 50%,rgba(125,211,252,.5))}
+.sevak-badge{position:absolute;top:-4px;right:-4px;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--accent-2);color:#1a0d04;font-size:.68rem;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(252,211,77,.5);font-family:var(--font-body)}
+.sevak-badge.hidden{display:none}
+.sevak-panel{position:fixed;bottom:106px;right:24px;z-index:199;width:400px;height:min(620px,calc(100vh - 140px));border-radius:22px;overflow:hidden;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(8,32,48,.97),rgba(4,18,28,.97));border:1px solid rgba(125,211,252,.25);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 25px 80px rgba(0,0,0,.6),0 0 60px rgba(125,211,252,.15);opacity:0;pointer-events:none;transform:translateY(20px) scale(.96);transition:all .4s cubic-bezier(.2,.8,.2,1)}
+.sevak-panel.open{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
+@media(max-width:520px){.sevak-panel{right:12px;left:12px;width:auto;bottom:96px;height:min(70vh,540px)}.sevak-orb{width:60px;height:60px;font-size:1.5rem;bottom:20px;right:16px}}
+.sevak-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:linear-gradient(90deg,rgba(125,211,252,.15),rgba(124,58,237,.08));border-bottom:1px solid var(--border)}
+.sevak-brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:900;font-size:.95rem;letter-spacing:3px;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sevak-brand .sevak-emoji{font-size:1.3rem;-webkit-text-fill-color:initial;animation:sevakEmoji 3s ease-in-out infinite}
+@keyframes sevakEmoji{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-3px) rotate(6deg)}}
+.sevak-actions{display:flex;align-items:center;gap:8px}
+.sevak-status{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:14px;background:rgba(0,0,0,.3);border:1px solid var(--border);font-size:.66rem;font-weight:700;color:#c9e2f0;letter-spacing:1px;text-transform:uppercase}
+.sevak-status .dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:dotBlink 1.5s ease-in-out infinite}
+.sevak-status.listening .dot{background:#fcd34d;animation-duration:.5s}
+.sevak-status.speaking .dot{background:#7c3aed;animation-duration:.8s}
+.sevak-status.processing .dot{background:#f59e0b;animation-duration:.7s}
+@keyframes dotBlink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.5)}}
+.sevak-btn{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);cursor:pointer;font-size:.85rem;transition:all .25s ease}
+.sevak-btn:hover{background:rgba(125,211,252,.2);border-color:var(--primary);color:var(--primary)}
+.sevak-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:rgba(125,211,252,.3) transparent}
+.sevak-messages::-webkit-scrollbar{width:5px}
+.sevak-messages::-webkit-scrollbar-thumb{background:rgba(125,211,252,.3);border-radius:3px}
+.sevak-messages::-webkit-scrollbar-track{background:transparent}
+.sevak-msg{max-width:88%;padding:11px 15px;border-radius:14px;font-size:.88rem;line-height:1.65;word-wrap:break-word;animation:msgIn .35s cubic-bezier(.2,.8,.2,1) both;user-select:text;-webkit-user-select:text}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.sevak-msg.user{align-self:flex-end;background:linear-gradient(135deg,rgba(125,211,252,.25),rgba(125,211,252,.1));border:1px solid rgba(125,211,252,.35);border-bottom-right-radius:4px;color:#ecf9ff}
+.sevak-msg.sevak{align-self:flex-start;background:linear-gradient(135deg,rgba(124,58,237,.18),rgba(134,239,172,.12));border:1px solid rgba(124,58,237,.3);border-bottom-left-radius:4px;color:#ecf9ff}
+.sevak-msg strong{color:#fff;font-weight:700}
+.sevak-msg a{color:var(--primary-2);border-bottom:1px dashed rgba(56,189,248,.5)}
+.sevak-msg a:hover{color:var(--accent)}
+.sevak-msg .ts{font-size:.62rem;color:var(--muted);display:block;margin-top:5px;opacity:.85}
+.sevak-msg .msg-img{margin-top:10px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.15);cursor:pointer;background:rgba(0,0,0,.4);padding:3px;transition:all .3s ease}
+.sevak-msg .msg-img:hover{border-color:var(--primary);box-shadow:0 4px 25px rgba(125,211,252,.3)}
+.sevak-msg .msg-img img{width:100%;max-height:220px;object-fit:contain;border-radius:8px;display:block}
+.sevak-msg .msg-caption{font-size:.68rem;color:var(--muted);padding:6px 8px;background:rgba(0,0,0,.4);text-align:center;font-style:italic}
+.sevak-typing{align-self:flex-start;padding:12px 16px;border-radius:14px;background:rgba(125,211,252,.15);border-bottom-left-radius:4px;display:flex;gap:5px}
+.sevak-typing span{width:6px;height:6px;border-radius:50%;background:var(--primary);animation:typeBounce 1.4s infinite}
+.sevak-typing span:nth-child(2){animation-delay:.2s}
+.sevak-typing span:nth-child(3){animation-delay:.4s}
+@keyframes typeBounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-7px);opacity:1}}
+.sevak-input{display:flex;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid var(--border);background:rgba(0,0,0,.3)}
+.sevak-input input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:.9rem;font-family:var(--font-body);padding:8px 4px}
+.sevak-input input::placeholder{color:var(--muted);opacity:.9}
+.sevak-input button{width:38px;height:38px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;border:none;font-size:1rem;transition:all .25s ease;flex-shrink:0}
+.sevak-mic{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text)}
+.sevak-mic:hover{border-color:var(--primary);background:rgba(125,211,252,.15);box-shadow:0 0 20px rgba(125,211,252,.3)}
+.sevak-mic.listening{border-color:var(--accent-2);background:rgba(252,211,77,.2);box-shadow:0 0 25px rgba(252,211,77,.5);animation:micPulse .6s ease-in-out infinite}
+@keyframes micPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.sevak-send{background:linear-gradient(135deg,var(--primary),var(--accent));color:#031410;font-weight:800;box-shadow:0 4px 18px rgba(125,211,252,.4)}
+.sevak-send:hover{transform:scale(1.08);box-shadow:0 6px 25px rgba(125,211,252,.6)}
+
+/* ── FULLPAGE OVERLAY ── */
+.fullpage-overlay{position:fixed;inset:0;z-index:900;display:flex;flex-direction:column;background:radial-gradient(1200px 600px at 50% -10%,rgba(124,58,237,.24),transparent 65%),radial-gradient(900px 500px at 85% 110%,rgba(125,211,252,.2),transparent 60%),rgba(4,18,28,.97);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);opacity:0;pointer-events:none;transform:translateY(24px) scale(.985);transition:opacity .45s cubic-bezier(.2,.8,.2,1),transform .45s cubic-bezier(.2,.8,.2,1);overflow:hidden}
+.fullpage-overlay.active{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
+.fullpage-header{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;border-bottom:1px solid var(--border);background:rgba(8,32,48,.6);flex-shrink:0}
+.fullpage-brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:900;font-size:1rem;letter-spacing:3px;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.fullpage-actions{display:flex;gap:10px}
+.fp-btn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text);cursor:pointer;font-size:.95rem;transition:all .3s ease}
+.fp-btn:hover{border-color:var(--primary);background:rgba(125,211,252,.15);box-shadow:0 0 20px rgba(125,211,252,.3)}
+.fp-btn.speaking{border-color:var(--mystery);background:rgba(124,58,237,.2);animation:micPulse .8s infinite}
+.fullpage-scroll{flex:1;overflow-y:auto;padding:44px 24px 90px}
+.fullpage-scroll::-webkit-scrollbar{width:6px}
+.fullpage-scroll::-webkit-scrollbar-thumb{background:rgba(125,211,252,.3);border-radius:3px}
+.fullpage-inner{max-width:860px;margin:0 auto;animation:fpIn .55s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fpIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.fullpage-question{display:inline-block;font-size:.78rem;letter-spacing:1.5px;text-transform:uppercase;color:#bae6fd;padding:8px 16px;border-radius:20px;margin-bottom:24px;background:rgba(125,211,252,.12);border:1px solid rgba(186,230,253,.4);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:800;text-shadow:0 0 16px rgba(186,230,253,.8)}
+.fullpage-answer{font-size:1.1rem;line-height:1.95;color:#f0f9ff;user-select:text;-webkit-user-select:text;text-shadow:0 0 12px rgba(186,230,253,.2)}
+.fullpage-answer strong{color:#fff;font-weight:800;text-shadow:0 0 14px rgba(186,230,253,.5)}
+.fullpage-answer a{color:var(--primary-2);border-bottom:1px dashed rgba(56,189,248,.5)}
+.fullpage-image{margin:28px 0 10px;border-radius:20px;overflow:hidden;border:1px solid var(--border);cursor:zoom-in;background:rgba(0,0,0,.35);padding:6px;box-shadow:0 25px 70px rgba(0,0,0,.55),0 0 60px rgba(125,211,252,.15);transition:all .35s ease;display:flex;justify-content:center;align-items:center}
+.fullpage-image:hover{border-color:var(--primary);transform:translateY(-3px);box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 80px rgba(125,211,252,.3)}
+.fullpage-image img{max-width:100%;max-height:500px;object-fit:contain;border-radius:14px;display:block}
+
+/* ── LIGHTBOX ── */
+.lightbox{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s ease;backdrop-filter:blur(10px)}
+.lightbox.active{opacity:1;pointer-events:auto}
+.lightbox-content{max-width:92%;max-height:88%;position:relative;border-radius:14px;overflow:hidden;box-shadow:0 0 80px rgba(125,211,252,.4)}
+.lightbox-content img{max-width:100%;max-height:80vh;object-fit:contain;display:block}
+.lightbox-close{position:absolute;top:14px;right:20px;font-size:2rem;color:#fff;cursor:pointer;z-index:2;line-height:1;transition:all .3s;text-shadow:0 0 20px rgba(0,0,0,.7)}
+.lightbox-close:hover{color:#bae6fd;transform:scale(1.15)}
+.lightbox-caption{text-align:center;color:#f0f9ff;font-size:.9rem;padding:12px 20px;background:rgba(0,0,0,.55);font-weight:500}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+.sevak-memory-pill{display:inline-block;margin-top:8px;padding:5px 9px;border-radius:12px;background:rgba(125,211,252,.12);border:1px solid rgba(186,230,253,.35);font-size:.64rem;letter-spacing:.8px;color:#bae6fd;text-transform:uppercase;font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="nature-backdrop" aria-hidden="true"></div>
+<canvas id="particleCanvas"></canvas>
+
+<!-- ═══════ NAVBAR ═══════ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-brand">🏔️ THE WISDOM OF MOUNTAIN</div>
+  <div class="nav-links">
+    <a href="#wheel">Four Pillars</a>
+    <a href="#blessing">Blessing</a>
+    <a href="#mystery">Mystery</a>
+    <a href="#beauty">Beauty</a>
+    <a href="#meditation">Meditation</a>
+    <a href="#aravali">Aravalli · Himalaya · Arunachal</a>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-brightness" id="brightnessToggle" title="Toggle brightness">☀️</button>
+    <button class="nav-sevak" id="navSevak">🤖 Ask Sevak</button>
+  </div>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<header class="hero">
+  <div class="hero-badge">🏔️ The Blessing · The Mystery · The Beauty · The Meditation</div>
+  <h1>THE WISDOM OF MOUNTAIN <small>(THE BLESSING OF THE EARTH)</small></h1>
+  <p class="hero-sub">Mountains are the part of the heart of Nature — the nature of Earth. If we consider the 30% of the land nature of the Earth, then this is the blessing. This is the blessing for our planet, our beautiful lovely Earth.</p>
+
+  <div class="hero-icons">
+    <div class="hero-icon-wrap">
+      <img class="hero-icon wiki-img" data-wiki="Himalayas snow mountain" alt="The Himalayas">
+      <span class="ilabel">Himalayas</span>
+    </div>
+    <div class="hero-icon-wrap">
+      <img class="hero-icon wiki-img" data-wiki="Aravalli Range" alt="Aravali Mountain">
+      <span class="ilabel">Aravali</span>
+    </div>
+    <div class="hero-icon-wrap">
+      <img class="hero-icon wiki-img" data-wiki="Uttarakhand Himalaya" alt="Uttarakhand Himalayas">
+      <span class="ilabel">Uttarakhand</span>
+    </div>
+    <div class="hero-icon-wrap">
+      <img class="hero-icon wiki-img" data-wiki="Mount Everest" alt="Everest">
+      <span class="ilabel">Everest</span>
+    </div>
+  </div>
+
+  <div class="hero-quote" id="heroQuote">🏔️ "Mountain is the place where humanity and nature get wisdom, peace, and Nirvana."</div>
+  <div class="hero-tags">
+    <span>🏔️ Blessing of the Mountain</span>
+    <span>🌫️ Mystery of the Mountain</span>
+    <span>🌿 Untouched Beauty</span>
+    <span>🧘 Meditation of Mountain</span>
+    <span>🙏 Aravali · Himalaya · Uttarakhand</span>
+  </div>
+  <button class="hero-cta" onclick="document.getElementById('wheel').scrollIntoView({behavior:'smooth'})">
+    Begin the Journey → Four Pillars
+  </button>
+  <div class="hero-scroll">scroll to explore</div>
+</header>
+
+<!-- ═══════ FOUR PILLARS WHEEL ═══════ -->
+<section id="wheel" class="section reveal">
+  <div class="section-head">
+    <span class="section-num">◆ THE FOUR PILLARS OF MOUNTAIN WISDOM ◆</span>
+    <h2>The <em>Mountain</em> Wheel</h2>
+    <p class="section-sub">Click each pillar to discover the Blessing, the Mystery, the Untouched Beauty, and the Meditation of the Mountain.</p>
+  </div>
+  <div class="wheel-layout">
+    <div class="wheel" id="wheelWheel">
+      <div class="wheel-center">
+        <span class="wc-emoji">🏔️</span>
+        <span class="wc-label">MOUNTAIN</span>
+      </div>
+      <button class="wheel-node" data-region="blessing" style="top:2%;left:50%"><span class="dot"></span>Blessing</button>
+      <button class="wheel-node" data-region="mystery" style="top:29%;left:86%"><span class="dot"></span>Mystery</button>
+      <button class="wheel-node" data-region="beauty" style="top:71%;left:86%"><span class="dot"></span>Untouched Beauty</button>
+      <button class="wheel-node" data-region="meditation" style="top:98%;left:50%"><span class="dot"></span>Meditation</button>
+      <button class="wheel-node" data-region="aravali" style="top:71%;left:14%"><span class="dot"></span>Aravali</button>
+      <button class="wheel-node" data-region="devbhoomi" style="top:29%;left:14%"><span class="dot"></span>Devbhoomi</button>
+    </div>
+    <div class="wheel-info" id="wheelInfo">
+      <h3>The Four Pillars</h3>
+      <div class="role">Blessing · Mystery · Beauty · Meditation</div>
+      <p>Mountains are the part of the heart of Nature. The first pillar is the <span class="c-green">Blessing of the Mountain</span>; the second is the <span class="c-mystery">Mystery of the Mountain</span>; the third is the <span class="c-gold">Untouched Beauty</span>; and the fourth is the <span class="c-snow">Meditation of Mountain</span>. <span class="c-saffron">Aravali</span> is the soul — <span class="c-white">Himalaya</span> is the wisdom. Click any pillar to enter.</p>
+      <div class="pillar-tag">Four Pillars · One Mountain</div>
+    </div>
+  </div>
+
+  <div class="quote-rotator reveal" data-quotes="wheelQuotes">
+    <div class="quote-text" id="wheelQuoteText">"Mountain is mysterious. Mountain is the most mysterious place on the Earth."</div>
+    <span class="quote-author" id="wheelQuoteAuthor">— The Wisdom of Mountain</span>
+    <div class="quote-dots" id="wheelQuoteDots"></div>
+  </div>
+</section>
+
+<!-- ═══════ FOUR PILLARS OVERVIEW ═══════ -->
+<section id="pillars" class="section reveal">
+  <div class="section-head">
+    <span class="section-num">◆ THE FOUNDATION ◆</span>
+    <h2>The Four <em>Pillars</em></h2>
+    <p class="section-sub">Each pillar is a complete wisdom. Together they form the temple of Mountain knowledge.</p>
+  </div>
+  <div class="pillar-grid">
+    <div class="pillar-card" onclick="document.getElementById('blessing').scrollIntoView({behavior:'smooth'})">
+      <div class="pillar-icon">💧</div>
+      <h3>THE BLESSING</h3>
+      <p>Because of the mountain, there are rivers, agriculture, fertile land, and life on Earth.</p>
+      <span class="pillar-sanskrit">Aashirwad · आशीर्वाद</span>
+    </div>
+    <div class="pillar-card" onclick="document.getElementById('mystery').scrollIntoView({behavior:'smooth'})">
+      <div class="pillar-icon">🌫️</div>
+      <h3>THE MYSTERY</h3>
+      <p>The Ghati — deeper than the ocean. The most mysterious place on Earth.</p>
+      <span class="pillar-sanskrit">Rahasya · रहस्य</span>
+    </div>
+    <div class="pillar-card" onclick="document.getElementById('beauty').scrollIntoView({behavior:'smooth'})">
+      <div class="pillar-icon">🌿</div>
+      <h3>UNTOUCHED BEAUTY</h3>
+      <p>Very less touched by humanity and technology — that is why the mountain forest survives.</p>
+      <span class="pillar-sanskrit">Saundarya · सौंदर्य</span>
+    </div>
+    <div class="pillar-card" onclick="document.getElementById('meditation').scrollIntoView({behavior:'smooth'})">
+      <div class="pillar-icon">🧘</div>
+      <h3>MEDITATION</h3>
+      <p>The most perfect, most sacred place for Dhyan. Even Adiyogi meditated on the Himalayas.</p>
+      <span class="pillar-sanskrit">Dhyan · ध्यान</span>
+    </div>
+  </div>
+
+  <div class="quote-rotator reveal" data-quotes="pillarQuotes">
+    <div class="quote-text" id="pillarQuoteText">"The true wisdom of the mountain is the blessing of the mountain toward Nature."</div>
+    <span class="quote-author" id="pillarQuoteAuthor">— The Wisdom of Mountain</span>
+    <div class="quote-dots" id="pillarQuoteDots"></div>
+  </div>
+</section>
+
+<!-- ═══════ PILLAR 1 — THE BLESSING ═══════ -->
+<section id="blessing" class="section pillar-section reveal">
+  <div class="pillar-header">
+    <span class="num">◆ PILLAR 01 ◆</span>
+    <h2>The <em>Blessing</em> of the Mountain</h2>
+    <p class="sub">Because of the mountain, there are rivers, agriculture, and life</p>
+  </div>
+
+  <p class="lead">Because of the mountain, there are a lot of fresh water rivers on our Earth. This is the most beautiful <strong>blessing of the mountain</strong>. Because of this we have drinkable water, water for cooking, and water for several tasks. Because of freshwater there is agriculture, there are fertile lands. So the mountain is also connected with our food sources.</p>
+
+  <div class="icon-gallery reveal">
+    <figure><img class="wiki-img" data-wiki="Ganga river" alt="Ganga"><figcaption>Ganga · The Sacred River</figcaption></figure>
+    <figure><img class="wiki-img" data-wiki="Yamuna river" alt="Yamuna"><figcaption>Yamuna · The Sister</figcaption></figure>
+    <figure><img class="wiki-img" data-wiki="Gangotri Glacier" alt="Gomukh Glacier"><figcaption>Gomukh · Source of Ganga</figcaption></figure>
+  </div>
+
+  <div class="wisdom-box reveal">
+    <span class="wlabel">◆ The Sacred Rivers of India ◆</span>
+    In India, the <strong>Ganga</strong> is from the <strong>Gomukh</strong> and the <strong>Yamuna</strong> is from the <strong>Yamunotri</strong> — both have the same source: the Himalayas. The Himalayas are always the source of India's most sacred rivers. The rivers that come from the Himalayas make the land very fertile for agriculture, for the Green Revolution, for natural beauties.
+  </div>
+
+  <article class="practice reveal">
+    <div class="practice-media">
+      <span class="img-badge">Blessing 01 · The Rivers</span>
+      <img class="wiki-img" data-wiki="Ganges river" alt="Ganga — The Sacred River of India">
+    </div>
+    <div class="practice-body">
+      <h3>The Mountain — The Mother of Rivers <span class="sanskrit">Nadi Ki Maa · नदी की माँ</span></h3>
+      <p class="desc">The mountain gives us the greatest blessing — <strong>the river</strong>. Without the river there is no drinking water, no agriculture, no fertile land, no life. The Ganga, Yamuna, Brahmaputra, Godavari, Narmada, Krishna, Kaveri — all flow from the mountains.</p>
+      <ul>
+        <li>Because of the mountain there is <strong>freshwater</strong>.</li>
+        <li>Because of freshwater there is <strong>agriculture</strong>.</li>
+        <li>Because of agriculture there is <strong>food</strong>.</li>
+        <li>Because of food there is <strong>life on the Earth</strong>.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="practice reverse reveal">
+    <div class="practice-media">
+      <span class="img-badge">Blessing 02 · The Snow</span>
+      <img class="wiki-img" data-wiki="Himalayas snow mountain" alt="The Himalayas — The Snow Blessing">
+    </div>
+    <div class="practice-body">
+      <h3>The Himalayas — The Guardian of India <span class="sanskrit">Himalaya · हिमालय</span></h3>
+      <p class="desc">The Himalayas are the greatest mountain of India. Because of the Himalayas there is <strong>no winter on the northern surface of India</strong> — Punjab, Haryana, Uttar Pradesh, Bihar, and Bengal are not cold, they are very fertile because of the blessings of the Himalayas. The Himalayas also stop the snow from covering India.</p>
+      <ul>
+        <li>Himalaya blocks the cold winds from Tibet.</li>
+        <li>Because of Himalaya, India's northern plains are fertile.</li>
+        <li>Because of Himalaya, the monsoon returns to India.</li>
+        <li>The Indian farmer can do their agriculture because of Himalaya.</li>
+      </ul>
+    </div>
+  </article>
+
+  <div class="devotional-banner reveal">
+    <div class="dev-img">
+      <img class="wiki-img" data-wiki="Himalayas mountain landscape" alt="Himalayas — The Blessing">
+    </div>
+    <div class="dev-copy">
+      <h3>◆ THE HIMALAYA · THE FIRST BLESSING ◆</h3>
+      <div class="shloka">"Because of the mountain, there is life. Because of life, there is Nature."</div>
+      <p>The mountain is the <strong>source of the blessing</strong>. The mountain always blesses humanity, nature, and our wildlife. Nature's gift is the mountain. Because of the mountains we have fertile land, we have rivers, we have food. <strong>The true wisdom of the mountain is the blessing of the mountain toward Nature.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ PILLAR 2 — THE MYSTERY ═══════ -->
+<section id="mystery" class="section pillar-section reveal">
+  <div class="pillar-header">
+    <span class="num">◆ PILLAR 02 ◆</span>
+    <h2>The <em>Mystery</em> of the Mountain</h2>
+    <p class="sub">More mysterious than the 70% of the ocean</p>
+  </div>
+
+  <p class="lead">Mountain is mysterious. Mountain is the <strong>most mysterious place on the Earth</strong>. Mountain is the most mysterious encounter of the human on the Earth — even more mysterious than the ocean. The ocean is 70% of the Earth, however the 2% of the mountain is much more mysterious than the 70% of the ocean — <strong>because the mountain has no way. You have to make your way in the mountain.</strong></p>
+
+  <div class="wisdom-box reveal">
+    <span class="wlabel">◆ The Ghati — Deeper Than the Ocean ◆</span>
+    The most mysterious part of the mountain is not their wildlife, not their greenery, not their forest. The most mysterious part of the mountain is the <strong>Ghati</strong> of the mountain. Ghati is the Sanskrit word — when you will see from the top of the mountain to the bottom, you will realise how they are fearful and how they are mistake — <strong>how there is more deeper than the ocean.</strong> This is speculation. There are a lot of mysteries of the mountain — there are a lot of falls of the mountains, there are very mysterious surfaces on the Earth of the mountain.
+  </div>
+
+  <div class="nature-gallery reveal">
+    <figure><img class="wiki-img" data-wiki="Valley of Flowers" alt="Valley"><figcaption>The Ghati · Valley</figcaption></figure>
+    <figure><img class="wiki-img" data-wiki="Kashmir valley" alt="Kashmir"><figcaption>Kashmir · Paradise</figcaption></figure>
+    <figure><img class="wiki-img" data-wiki="Uttarakhand Himalaya" alt="Uttarakhand"><figcaption>Uttarakhand</figcaption></figure>
+    <figure><img class="wiki-img" data-wiki="Himalayas mountain" alt="Mountains"><figcaption>The Mystery</figcaption></figure>
+  </div>
+
+  <article class="practice reveal">
+    <div class="practice-media">
+      <span class="img-badge">Mystery 01 · The Ghati</span>
+      <img class="wiki-img" data-wiki="Valley of Flowers" alt="The Ghati — Mountain Valley">
+    </div>
+    <div class="practice-body">
+      <h3>The Ghati — The Deepest Mystery <span class="sanskrit">Ghati · घाटी</span></h3>
+      <p class="desc">Ghati is the Sanskrit word for the mountain valley. When you stand at the top of the mountain and look down — you will realise the depth is <strong>deeper than the ocean</strong>. This is the mystery of the mountain — a place where you have to make your own way.</p>
+      <ul>
+        <li>The Ghati is the most mysterious part of the mountain.</li>
+        <li>Its depth is greater than the deepest ocean.</li>
+        <li>The human has to make their own way in the mountain.</li>
+        <li>There are many falls, many hidden surfaces, many mysteries.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="practice reverse reveal">
+    <div class="practice-media">
+      <span class="img-badge">Mystery 02 · The Dual Nature</span>
+      <img class="wiki-img" data-wiki="Kashmir valley" alt="Kashmir — Paradise and Mystery">
+    </div>
+    <div class="practice-body">
+      <h3>The Dual Nature — Dev and Danav <span class="sanskrit">Dev · Danav · देव और दानव</span></h3>
+      <p class="desc">The mountain has <strong>darkness</strong>, and even the mountain has the <strong>top of the light</strong>. The rays of the Sun first come on the mountain — on the top of the mountain — then on the land. We have to understand the <strong>dual nature of the mountain</strong> — Dev and Danav, God and Demon. Shri Ramchandra and Ravan — both are necessary for the Earth.</p>
+      <ul>
+        <li>The mountain has both <strong>darkness</strong> and <strong>light</strong>.</li>
+        <li>The Sun's rays first touch the mountain top.</li>
+        <li>Dev and Danav — both are part of the balance.</li>
+        <li>When we understand this, there is no question — only solution.</li>
+      </ul>
+    </div>
+  </article>
+
+  <div class="wisdom-box reveal">
+    <span class="wlabel">◆ Kashmir · Jammu & Kashmir · The Most Beautiful ◆</span>
+    Consider the mystery of <strong>Kashmir</strong> — Jammu and Kashmir — the place of natural beauties. Still, they do not have any match. Because there is <strong>less technology</strong>, there is <strong>less crowd</strong>. This is the most beautiful and mysterious land on the Earth.
+  </div>
+  <article class="practice reverse reveal">
+    <div class="practice-media">
+      <span class="img-badge">Mystery 03 · Arunachal Pradesh</span>
+      <img class="wiki-img" data-wiki="Namdapha National Park rainforest Arunachal Pradesh" alt="Arunachal Pradesh — misty rainforest and mountains">
+    </div>
+    <div class="practice-body">
+      <h3>Arunachal Pradesh — The Forest of Mystery <span class="sanskrit">The Eastern Himalaya</span></h3>
+      <p class="desc"><strong>Arunachal Pradesh</strong> is part of the Eastern Himalaya, where steep mountains, deep valleys, monsoon rain, mist and dense forests create a powerful sense of the unknown. In a forest, every turn may reveal a stream, a wildlife call or a path that disappears into the mist. Its mystery comes from the living complexity of nature—not from proof of ghosts or supernatural danger.</p>
+      <ul>
+        <li>Remote valleys and layered green mountains invite wonder and humility.</li>
+        <li>Namdapha and other protected landscapes shelter remarkable biodiversity.</li>
+        <li>Forest sounds, mist and fading daylight can make the same place feel different by day and night.</li>
+        <li>Respect local communities, wildlife, sacred places and protected-area rules.</li>
+      </ul>
+    </div>
+  </article>
+  <div class="wisdom-box reveal">
+    <span class="wlabel">◆ Ghost Forest · God Forest · The Dual Nature ◆</span>
+    At dawn, sunlight illuminates the eastern ridgelines and forest canopies. At night, the same forest can appear shadowy, immense and almost otherworldly. In this creation, <strong>“ghost forest” describes the feeling of mystery and awe; “God forest” describes reverence for the life it protects.</strong> Darkness is not evil, and mystery does not need to be feared blindly. When we acknowledge fear with care and awareness, we can see the forest's extraordinary beauty—and remember that it is a living home, not a place to conquer.
+  </div>
+</section>
+
+<!-- ═══════ PILLAR 3 — UNTOUCHED BEAUTY ═══════ -->
+<section id="beauty" class="section pillar-section reveal">
+  <div class="pillar-header">
+    <span class="num">◆ PILLAR 03 ◆</span>
+    <h2>The <em>Untouched Beauty</em> of the Mountain</h2>
+    <p class="sub">Very less touched by humanity and technology</p>
+  </div>
+
+  <p class="lead">The third pillar is the <strong>untouched beauty of the mountain</strong> — because the touching and encounter with the beauty of the nature of the mountain is difficult for the humanity, human technology, and human development. That is why humanity can develop the technology on the flat land, but the mountain is still very hard for them. <strong>That is why the beauty of the nature of the mountain is untouched and less encountered — and we can feel it, we can experience it.</strong></p>
+
+  <div class="nature-gallery reveal">
+    <figure><img class="wiki-img" data-wiki="Himalayas mountain" alt="Himalaya"><figcaption>Himalaya · Untouched</figcaption></figure>
+    <figure><img class="wiki-img" data-wiki="Arunachal Pradesh rainforest" alt="Arunachal Pradesh rainforest"><figcaption>Arunachal · Green Wilderness</figcaption></figure>
+    <figure><img class="wiki-img" data-wiki="Red panda" alt="Red Panda"><figcaption>Red Panda · Eastern Himalaya</figcaption></figure>
+    <figure><img class="wiki-img" data-wiki="Great hornbill Arunachal Pradesh" alt="Great hornbill"><figcaption>Hornbill · Forest Life</figcaption></figure>
+  </div>
+
+  <article class="practice reveal">
+    <div class="practice-media">
+      <span class="img-badge">Beauty 01 · The Himalaya</span>
+      <img class="wiki-img" data-wiki="Himalayas mountain" alt="Himalaya — The Untouched Beauty">
+    </div>
+    <div class="practice-body">
+      <h3>The Himalaya — The Untouched Land <span class="sanskrit">Himalaya · हिमालय</span></h3>
+      <p class="desc">The most untouched lands of the mountains are the <strong>Himalayas</strong>, the <strong>Alaskan Mountains</strong>, and the <strong>Pradesh</strong>. Because they are difficult to experience for humanity, the wildlife of the Himalayas is secured by the mountain. There are a lot of wildlife on the mountains — even on the Himalaya: the <strong>Red Panda</strong>, the <strong>Snow Leopard</strong>, a lot of beautiful deer.</p>
+      <ul>
+        <li>The most untouched lands of the mountains.</li>
+        <li>Wildlife is secured by the mountain itself.</li>
+        <li>Red Panda, Snow Leopard, and Himalayan deer live free.</li>
+        <li>The beauty is protected by the difficulty of approach.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="practice reverse reveal">
+    <div class="practice-media">
+      <span class="img-badge">Beauty 02 · The Tribals</span>
+      <img class="wiki-img" data-wiki="Himalayan village" alt="Himalayan Tribal Life">
+    </div>
+    <div class="practice-body">
+      <h3>The Tribal Human Race <span class="sanskrit">Adivasi · आदिवासी</span></h3>
+      <p class="desc">There are a lot of tribals, a lot of human races, a lot of animal kingdoms on the mountain which are <strong>totally untouched</strong>. They are totally out of the network from human development — but they are <strong>much more immune</strong>. They have more technical immunity, developed immunity — because they are <strong>deeply connected with the true nature, the true nature of the Earth</strong>.</p>
+      <ul>
+        <li>Totally untouched by human development.</li>
+        <li>More immune than the so-called modern world.</li>
+        <li>Deeply connected with the true nature of the Earth.</li>
+        <li>Always connect with the component of Nature.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="practice reveal">
+    <div class="practice-media">
+      <span class="img-badge">Beauty 03 · Arunachal Pradesh</span>
+      <img class="wiki-img" data-wiki="Ziro Valley Arunachal Pradesh green mountains" alt="Ziro Valley — Arunachal Pradesh">
+    </div>
+    <div class="practice-body">
+      <h3>Arunachal Pradesh — The Living Green Wonder <span class="sanskrit">Forest · River · Wildlife</span></h3>
+      <p class="desc">Arunachal Pradesh is not only a place of mystery: it is also a landscape of extraordinary beauty. Forested slopes descend into river valleys; clouds drift across green ridges; waterfalls, orchids, birds and diverse wildlife make the Eastern Himalaya feel alive in countless forms. Its forests are important biodiversity landscapes, and their beauty is inseparable from the people and communities who have cared for these lands over generations.</p>
+      <ul>
+        <li>Places such as Ziro Valley reveal the variety of Arunachal's landscapes and cultures.</li>
+        <li>Namdapha National Park is known for rich habitats and diverse wildlife.</li>
+        <li>Red pandas occur in parts of the Eastern Himalaya; many other species depend on intact forest habitats.</li>
+        <li>Protect rivers, forests and wildlife through responsible travel and respect for local cultures.</li>
+      </ul>
+    </div>
+  </article>
+  <div class="wisdom-box reveal">
+    <span class="wlabel">◆ Beauty Is More Than a View ◆</span>
+    The experience of Arunachal Pradesh can remind us that nature is not merely a photograph or a destination. It is rain feeding a river, roots holding soil, birds carrying life through the forest, and communities living in relationship with the land. <strong>To experience this beauty truly is to leave it alive, respected and undisturbed.</strong>
+  </div>
+
+  <div class="wisdom-box reveal">
+    <span class="wlabel">◆ The Precious Connection ◆</span>
+    That is why I am always saying — <strong>always connect with the Nature. Always connect with the component of the Nature — like the nature of the Earth, the most precious our Sun.</strong> Connect with the green tree of the Nature. They are the part of the blessing — they are dedicated towards us. But we are not understanding. <strong>Humanity is not understanding about Nature and natural beauties.</strong>
+  </div>
+</section>
+
+<!-- ═══════ PILLAR 4 — MEDITATION OF MOUNTAIN ═══════ -->
+<section id="meditation" class="section pillar-section reveal">
+  <div class="pillar-header">
+    <span class="num">◆ PILLAR 04 · THE FINAL ◆</span>
+    <h2>The <em>Meditation</em> of Mountain</h2>
+    <p class="sub">The most perfect, most sacred place for Dhyan</p>
+  </div>
+
+  <p class="lead">The last and final pillar is the <strong>Meditation of Mountain</strong>. In India, even on the Earth, there are a lot of saints, there are a lot of Maharishis, there are a lot of Yogis. Even <strong>Adiyogi meditated on the Himalayas</strong>. Mountain is the most perfect place, the most sacred place, for the meditation — for Dhyan.</p>
+
+  <div class="wisdom-box reveal">
+    <span class="wlabel">◆ What Is Dhyan ◆</span>
+    Dhyan does not mean that other places are not perfect. But we have to understand that <strong>meditation is part of our mind</strong>. Your mind is doing meditation — Dhyan. There is no relation with physical. There is no need of physical strength. You should have to be <strong>mentally strong</strong>. Mental strength will be high. But in the Yoga Sutra, in the Yoga, we have to understand that because of our physical body, our mind exists. Without physical body there is no existence of our mind. <strong>That is why physical bodies are also very necessary — very important.</strong> That is why you have to train our physical body also for the hard difficulties.
+  </div>
+
+  <article class="practice reveal">
+    <div class="practice-media">
+      <span class="img-badge">Meditation 01 · The Mountain Path</span>
+      <img class="wiki-img" data-wiki="Himalayas trekking" alt="Mountain Trekking — The Body and Mind">
+    </div>
+    <div class="practice-body">
+      <h3>Climbing the Mountain <span class="sanskrit">Parvat Arohan · पर्वत आरोहण</span></h3>
+      <p class="desc">When you climb on the mountain, when we live on the mountains, when we survive on the mountain — our body is trained, our body becomes much stronger, our strength becomes stronger, our heart will become stronger, our <strong>determination gets strength</strong>. Our <strong>Sankalp Shakti</strong> — the strongest strength of human life — becomes stronger.</p>
+      <ul>
+        <li>Our body becomes stronger.</li>
+        <li>Our heart becomes stronger.</li>
+        <li>Our <strong>Sankalp Shakti</strong> — determination — becomes stronger.</li>
+        <li>Sankalp Shakti is the strongest energy of human life.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="practice reverse reveal">
+    <div class="practice-media">
+      <span class="img-badge">Meditation 02 · The Dhyan</span>
+      <img class="wiki-img" data-wiki="Shiva meditating Rishikesh" alt="Adiyogi — The First Yogi">
+    </div>
+    <div class="practice-body">
+      <h3>The Meditation of Mountain <span class="sanskrit">Parvat Dhyan · पर्वत ध्यान</span></h3>
+      <p class="desc">Below that, meditation — Dhyan — is for the mind. If you cannot climb the mountain, does not mean you cannot do meditation. No, no, this is the wrong idea. We can also do meditation — but <strong>the mountain supports meditation</strong>. Because they are on the height, when an object is on the height, your body distance increases against the Earth, and our body is separate from the Earth. So that the simple answer is — <strong>our physical nature, our face quality, our physicality has less impact on our mind</strong>. Then you can do easily meditation — Dhyan — and you will experience your truth. You will surely experience your spirit.</p>
+      <ul>
+        <li>The mountain supports meditation because of its height.</li>
+        <li>The body's distance from the Earth increases.</li>
+        <li>The physicality has less impact on the mind.</li>
+        <li>You will experience your truth — you will experience your spirit.</li>
+      </ul>
+    </div>
+  </article>
+
+  <div class="devotional-banner reveal">
+    <div class="dev-img">
+      <img class="wiki-img" data-wiki="Shiva meditating Rishikesh" alt="Adiyogi — The First Yogi of the Himalaya">
+    </div>
+    <div class="dev-copy">
+      <h3>◆ ADIYOGI · THE FIRST YOGI ◆</h3>
+      <div class="shloka">"Even Adiyogi meditated on the Himalayas."</div>
+      <p>Bhagwan Shiv — the <strong>Adiyogi</strong> — sits in the Himalayas. The mountains are His asana. The river Ganga flows from His hair. The silence of the forest is His Dhyan. <strong>Nature is not outside Him — Nature is His body.</strong> That is why the highest meditation of the mountain is to sit still and let the mountain teach you the truth.</p>
+    </div>
+  </div>
+
+  <div class="wisdom-box reveal" style="border-color:rgba(252,211,77,.7)">
+    <span class="wlabel">◆ Our Determination — Sankalp ◆</span>
+    Our determination, in the beauty of the nature of the mountain — <strong>we have understood the mountains are much essential for our life. They are the part of the honour, respect, and love for us. They are the blessing of us. They give everything what they can give — without any self-interest.</strong> That is why Nature is the true love. That is why we call Nature the Mother — Mother Nature. Because of her attitude, because of her kindness to all our life — they give everything without any self-interest. They are the part of our true love.<br><br>
+    <strong>So let's we have to determine that we will love our mountains. We will love our Nature, our rivers, our forest, our jungle — even our wildlife. They are also necessary for the Earth. Even we human — humans are also the part of the Nature of the Earth. Love and harmony should also be on our Earth. This is the most essential experience for the living being.</strong>
+  </div>
+</section>
+
+<!-- ═══════ ARAVALI & HIMALAYA ═══════ -->
+<section id="aravali" class="section pillar-section reveal">
+  <div class="pillar-header">
+    <span class="num">◆ THE SOUL AND THE WISDOM OF INDIA ◆</span>
+    <h2><em>Aravalli</em>, <em>Himalaya</em> and <em>Arunachal</em></h2>
+    <p class="sub">The soul, the wisdom and the living forest spirit of India</p>
+  </div>
+
+  <p class="lead">Now I am talking about the <strong>Aravalli Forest and Aravalli Range</strong>, the <strong>Himalaya</strong>, and the forested mountains of <strong>Arunachal Pradesh</strong>. The Aravalli Range is among the world's ancient mountain ranges; its rocky hills, scrub forests and woodland habitats support wildlife and carry a deep sense of time. The Himalaya brings the scale and wisdom of high mountains, glaciers and rivers. Arunachal Pradesh brings the living mystery of the Eastern Himalaya: dense forests, rain-fed rivers, extraordinary biodiversity and valleys that invite wonder. In this project's language, <strong>Aravalli is the soul, the Himalaya is the wisdom, and Arunachal Pradesh is the forest's living spirit</strong>—different expressions of one Earth, each deserving care.</p>
+
+  <div class="nature-gallery reveal">
+    <figure><img class="wiki-img" data-wiki="Aravalli Range" alt="Aravali"><figcaption>Aravali · The Soul</figcaption></figure>
+    <figure><img class="wiki-img" data-wiki="Himalayas mountain" alt="Himalaya"><figcaption>Himalaya · The Wisdom</figcaption></figure>
+    <figure><img class="wiki-img" data-wiki="Arunachal Pradesh rainforest" alt="Arunachal Pradesh forest"><figcaption>Arunachal · Forest Spirit</figcaption></figure>
+    <figure><img class="wiki-img" data-wiki="Namdapha National Park" alt="Namdapha National Park"><figcaption>Namdapha · Wildlife</figcaption></figure>
+  </div>
+
+  <div class="wisdom-box reveal">
+    <span class="wlabel">◆ Aravali — The Soul · Himalaya — The Wisdom ◆</span>
+    Aravali has the most life among all mountains. The Himalayas have the true wisdom through herbs for our health. But <strong>Aravali has built harmony, greenery, and life for humanity</strong>. That is why I am saying — <strong>Himalaya and Aravali — Himalaya as well as Aravali — and Himalaya as well as Aravali of India — are the soul of India</strong>. Because of this India has harmony. India has the true wisdom. And the wisdom is the way of <strong>Nirvana</strong>.
+  </div>
+  <div class="wisdom-box reveal">
+    <span class="wlabel">◆ Three Landscapes · One Living Earth ◆</span>
+    The Aravalli forests, the Himalaya and Arunachal Pradesh are not rivals to be ranked; they are different worlds of nature. The Aravalli's ancient hills and dry forests, the Himalaya's high peaks and river sources, and Arunachal's rain-soaked forests and wildlife each hold their own wonder. <strong>When we accept our fear without letting it rule us, we can meet the unknown with respect—and discover that the forest's mystery is also its beauty.</strong> Our spirit is connected to nature through dependence, attention and care. Let us dedicate ourselves to the beauty of the Earth and protect these places for all living beings.
+  </div>
+</section>
+
+<!-- ═══════ UTTARAKHAND — DEVBHUMI ═══════ -->
+<section id="devbhoomi" class="section pillar-section reveal">
+  <div class="pillar-header">
+    <span class="num">◆ THE LAND OF THE GOD ◆</span>
+    <h2><em>Uttarakhand</em> — Devbhoomi</h2>
+    <p class="sub">The Land of the God · The Land of the Ghost</p>
+  </div>
+
+  <p class="lead">Mountain has darkness, and even the mountain has the top of the light. The rays of the Sun first come on the mountain — the top of the mountain — then on the land. Mountain is the source of the mystery. Mountain is the mother of all rivers. Mountain gives us blessing. <strong>Uttarakhand — Devbhoomi Uttarakhand — the place of the God, the land of the God — is also the land of the ghost.</strong></p>
+
+  <div class="wisdom-box reveal">
+    <span class="wlabel">◆ The Dual Nature of Uttarakhand ◆</span>
+    There are a lot of mountains in Uttarakhand that are <strong>bhautik</strong> — that are the horror on the Earth. Uttarakhand is the place, the mountains of Uttarakhand are the blessing of the God — the <strong>Shiv, the Parmeshwar</strong>. We have to understand the <strong>dual nature of the mountain</strong>. We have both — <strong>Dev and Danav, God and Demon</strong>. This is the true nature — where the balance of God and Demon, Shri Ramchandra and Ravan, both are necessary for the Earth.<br><br>
+    When we will understand that, there will be no question. There will be no queries. There is only solution. We can see the solution. We can see the reality of the Nature. You can see the reality and the wisdom of the universe. <strong>If you understand the wisdom of the universe, if you experience the silence and peace of the existence — this is the true experience. This is the supreme experience. Supreme knowledge.</strong>
+  </div>
+
+  <div class="devotional-banner reveal">
+    <div class="dev-img">
+      <img class="wiki-img" data-wiki="Kedarnath temple" alt="Kedarnath — The Sacred Shrine of Uttarakhand">
+    </div>
+    <div class="dev-copy">
+      <h3>◆ UTTARAKHAND · DEVBHUMI ◆</h3>
+      <div class="shloka">"The land of the God — and also the land of the ghost."</div>
+      <p><strong>Uttarakhand</strong> is the Devbhoomi — the land of the Gods. Kedarnath, Badrinath, Gangotri, Yamunotri — the four Dhams sit in the Himalayas of Uttarakhand. But Uttarakhand is also the land of the ghost — the land of mystery, of the hidden, of the unknown. <strong>Both are the truth. Both are the nature. Both are the mountain.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ DETERMINATION ═══════ -->
+<section id="determination" class="section pillar-section reveal">
+  <div class="pillar-header">
+    <span class="num">◆ OUR DETERMINATION ◆</span>
+    <h2>We Will <em>Love</em> Our Mountains</h2>
+    <p class="sub">The mountain is the blessing — the mountain is the true love</p>
+  </div>
+
+  <div class="determination-box reveal">
+    <span class="det-tag">◆ Our Sankalp ◆</span>
+    <h3>We Will Maintain the Beauty of the Mountain</h3>
+
+    <div class="det-mountain" aria-hidden="true">
+      <img class="wiki-img" data-wiki="Himalayas snow mountain" alt="The Mountain — our blessing">
+    </div>
+
+    <div class="det-carousel">
+      <button class="det-nav det-prev" id="detPrev" aria-label="Previous determination">❮</button>
+      <p id="determinationQuote"></p>
+      <button class="det-nav det-next" id="detNext" aria-label="Next determination">❯</button>
+    </div>
+
+    <div class="det-dots" id="detDots" role="tablist" aria-label="Determination slides"></div>
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  <div class="foot-brand">🏔️ THE WISDOM OF MOUNTAIN</div>
+  <div class="foot-tag">The blessing · The mystery · The beauty · The meditation</div>
+  <div class="foot-links">
+    <a href="#wheel">Four Pillars</a>
+    <a href="#blessing">Blessing</a>
+    <a href="#mystery">Mystery</a>
+    <a href="#beauty">Untouched Beauty</a>
+    <a href="#meditation">Meditation</a>
+    <a href="#aravali">Aravali</a>
+    <a href="#devbhoomi">Devbhoomi</a>
+    <a href="#determination">Determination</a>
+  </div>
+  <div class="foot-credit">
+    Guided by the wisdom of the mountains — the blessing of Nature, the soul of India. Powered by <strong>SEVAK IVA</strong> — the Intelligent Voice Assistant. Created by <strong>Ayush Kumar Jha</strong>. 🙏 <strong>Jai Shree Ram.</strong>
+  </div>
+</footer>
+
+<!-- ═══════ SEVAK ORB ═══════ -->
+<div class="sevak-orb" id="sevakOrb" title="Ask SEVAK">
+  <span>🤖</span>
+  <span class="sevak-badge" id="sevakBadge">1</span>
+</div>
+
+<!-- ═══════ SEVAK PANEL ═══════ -->
+<div class="sevak-panel" id="sevakPanel">
+  <div class="sevak-header">
+    <div class="sevak-brand">
+      <span class="sevak-emoji">🏔️</span>
+      <span>SEVAK</span>
+    </div>
+    <div class="sevak-actions">
+      <span class="sevak-status" id="sevakStatus"><span class="dot"></span><span id="sevakStatusText">Ready</span></span>
+      <button class="sevak-btn" id="sevakExpand" title="Full page answer">⛶</button>
+      <button class="sevak-btn" id="sevakClose" title="Close">✕</button>
+    </div>
+  </div>
+  <div class="sevak-messages" id="sevakMessages"></div>
+  <div class="sevak-input">
+    <button class="sevak-mic" id="sevakMic" title="Voice input">🎤</button>
+    <input type="text" id="sevakInput" placeholder="Ask Sevak about mountains, rivers, Aravali, Himalaya..." autocomplete="off">
+    <button class="sevak-send" id="sevakSend" title="Send">➤</button>
+  </div>
+</div>
+
+<!-- ═══════ FULLPAGE OVERLAY ═══════ -->
+<div class="fullpage-overlay" id="fullpageOverlay">
+  <div class="fullpage-header">
+    <div class="fullpage-brand">🏔️ <span>SEVAK</span></div>
+    <div class="fullpage-actions">
+      <button class="fp-btn" id="fullpageSpeakBtn" title="Replay answer">🔊</button>
+      <button class="fp-btn" id="fullpageCopyBtn" title="Copy answer">📋</button>
+      <button class="fp-btn" id="fullpageCloseBtn" title="Close (Esc)">✕</button>
+    </div>
+  </div>
+  <div class="fullpage-scroll" id="fullpageScroll">
+    <div class="fullpage-inner">
+      <div class="fullpage-question" id="fullpageQuestion"></div>
+      <div class="fullpage-answer" id="fullpageAnswer"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ LIGHTBOX ═══════ -->
+<div class="lightbox" id="lightboxOverlay">
+  <div class="lightbox-content">
+    <span class="lightbox-close" id="lightboxClose">✕</span>
+    <img id="lightboxImage" src="" alt="Full size">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ═══════ BRIGHTNESS ═══════ */
+const brightnessToggle = document.getElementById('brightnessToggle');
+function initBrightness(){
+  const saved = localStorage.getItem('wm-bright-mode');
+  if(saved === 'true'){ document.body.classList.add('bright-mode'); brightnessToggle.textContent='🌙'; brightnessToggle.classList.add('active'); }
+  brightnessToggle.addEventListener('click', ()=>{
+    document.body.classList.toggle('bright-mode');
+    const isBright = document.body.classList.contains('bright-mode');
+    brightnessToggle.textContent = isBright ? '🌙' : '☀️';
+    brightnessToggle.classList.toggle('active', isBright);
+    localStorage.setItem('wm-bright-mode', isBright);
+  });
+}
+
+/* ═══════ QUOTES ═══════ */
+const QUOTE_LIBRARY = {
+  heroQuotes: [
+    {text:'🏔️ "Mountain is the place where humanity and nature get wisdom, peace, and Nirvana."', author:'— The Wisdom of Mountain'},
+    {text:'🏔️ "The true wisdom of the mountain is the blessing of the mountain toward Nature."', author:'— The Wisdom of Mountain'},
+    {text:'🏔️ "Mountain is the most mysterious place on the Earth."', author:'— The Wisdom of Mountain'},
+    {text:'🏔️ "Aravali is the soul of the mountain — Himalaya is the wisdom."', author:'— The Wisdom of Mountain'},
+    {text:'🏔️ "Because of the mountain there is life, there is Nature, there is the Earth."', author:'— The Wisdom of Mountain'},
+    {text:'🏔️ "The mountain gives everything without self-interest — that is why Nature is true love."', author:'— The Wisdom of Mountain'}
+  ],
+  wheelQuotes: [
+    {text:'"Mountain is mysterious. Mountain is the most mysterious place on the Earth."', author:'— The Wisdom of Mountain'},
+    {text:'"Because of the mountain, there are rivers, agriculture, fertile land, and life."', author:'— Pillar One'},
+    {text:'"The mountain has no way — you have to make your way in the mountain."', author:'— Pillar Two'},
+    {text:'"The beauty is untouched because the encounter is difficult."', author:'— Pillar Three'},
+    {text:'"Even Adiyogi meditated on the Himalayas."', author:'— Pillar Four'}
+  ],
+  pillarQuotes: [
+    {text:'"The true wisdom of the mountain is the blessing of the mountain toward Nature."', author:'— The Wisdom of Mountain'},
+    {text:'"Because of Himalaya, India\'s northern plains are fertile."', author:'— The Blessing'},
+    {text:'"The Ghati is deeper than the ocean."', author:'— The Mystery'},
+    {text:'"The mountain is secured by the difficulty of approach."', author:'— Untouched Beauty'},
+    {text:'"The Sankalp Shakti is the strongest energy of human life."', author:'— The Meditation'}
+  ],
+  natureQuotes: [
+    {text:'"Always connect with the Nature — with the component of the Nature."', author:'— The Wisdom of Mountain'},
+    {text:'"We are also the part of the Nature of the Earth."', author:'— The Wisdom of Mountain'},
+    {text:'"Love and harmony should also be on our Earth."', author:'— The Wisdom of Mountain'},
+    {text:'"The river is the mother — the mountain is the source."', author:'— The Wisdom of Mountain'}
+  ]
+};
+
+function buildQuoteRotator(key, textEl, authorEl, dotsEl, intervalMs){
+  const quotes = QUOTE_LIBRARY[key];
+  if(!quotes || !textEl || !authorEl) return;
+  let idx = 0;
+  if(dotsEl){
+    dotsEl.innerHTML = '';
+    quotes.forEach((_, i)=>{
+      const dot = document.createElement('span');
+      if(i === 0) dot.classList.add('active');
+      dot.addEventListener('click', ()=>{ idx = i; render(); resetInterval(); });
+      dotsEl.appendChild(dot);
+    });
+  }
+  function render(){
+    const q = quotes[idx];
+    textEl.style.opacity = '0'; authorEl.style.opacity = '0';
+    setTimeout(()=>{
+      textEl.textContent = q.text; authorEl.textContent = q.author;
+      textEl.style.opacity = '1'; authorEl.style.opacity = '1';
+    }, 200);
+    if(dotsEl){ [...dotsEl.children].forEach((d, i)=>{ d.classList.toggle('active', i === idx); }); }
+  }
+  function next(){ idx = (idx + 1) % quotes.length; render(); }
+  let timer = setInterval(next, intervalMs);
+  function resetInterval(){ clearInterval(timer); timer = setInterval(next, intervalMs); }
+}
+
+/* ═══════ DETERMINATIONS ═══════ */
+const DETERMINATIONS = [
+  `We are the <strong>component of the Earth</strong>.<br>
+   Earth is the <strong>component of the Sun</strong>.<br>
+   Because of the Mountain there is the river.<br>
+   Because of the river there is the field.<br>
+   Because of the field there is life.<br>
+   <strong>We will love our mountains.</strong>`,
+
+  `We will <strong>love our mountains</strong>.<br>
+   We will <strong>love our Nature</strong>.<br>
+   We will <strong>love our rivers</strong>.<br>
+   We will <strong>love our forest, our jungle</strong>.<br>
+   Even our <strong>wildlife</strong> — they are also necessary for the Earth.<br>
+   <strong>We will maintain the beauty of the Mountain.</strong>`,
+
+  `The mountain gives everything — <strong>without any self-interest</strong>.<br>
+   That is why Nature is the <strong>true love</strong>.<br>
+   That is why we call Nature the <strong>Mother — Mother Nature</strong>.<br>
+   Because of her attitude, because of her kindness to all our life —<br>
+   <strong>We will maintain the beauty of the Mountain.</strong>`,
+
+  `Even we human — <strong>humans are also the part of the Nature of the Earth</strong>.<br>
+   Love and harmony should also be on our Earth.<br>
+   This is the most essential experience for the living being.<br>
+   <strong>We will maintain the beauty of the Mountain.</strong>`,
+
+  `<strong>Sankalp Shakti</strong> is the strongest energy of human life.<br>
+   The mountain gives us Sankalp Shakti.<br>
+   The mountain gives us <strong>Dhyan</strong>.<br>
+   The mountain gives us <strong>Nirvana</strong>.<br>
+   <strong>We will love our mountains.</strong><br>
+   <strong>Jai Shree Ram.</strong>`
+];
+
+function initDetermination(){
+  const detEl = document.getElementById('determinationQuote');
+  const detDots = document.getElementById('detDots');
+  const detPrev = document.getElementById('detPrev');
+  const detNext = document.getElementById('detNext');
+  if(!detEl) return;
+  let d = 0; let detTimer = null;
+  if(detDots){
+    detDots.innerHTML = '';
+    DETERMINATIONS.forEach((_, i)=>{
+      const dot = document.createElement('span');
+      if(i === 0) dot.classList.add('active');
+      dot.addEventListener('click', ()=>{ d = i; renderDet(); resetDetTimer(); });
+      detDots.appendChild(dot);
+    });
+  }
+  function renderDet(){
+    detEl.style.opacity = '0';
+    setTimeout(()=>{ detEl.innerHTML = DETERMINATIONS[d]; detEl.style.opacity = '1'; }, 300);
+    if(detDots){ [...detDots.children].forEach((dot, i)=>dot.classList.toggle('active', i===d)); }
+  }
+  function nextDet(){ d = (d + 1) % DETERMINATIONS.length; renderDet(); }
+  function prevDet(){ d = (d - 1 + DETERMINATIONS.length) % DETERMINATIONS.length; renderDet(); }
+  function resetDetTimer(){ clearInterval(detTimer); detTimer = setInterval(nextDet, 10000); }
+  detEl.innerHTML = DETERMINATIONS[0]; detEl.style.opacity = '1';
+  if(detNext) detNext.addEventListener('click', ()=>{ nextDet(); resetDetTimer(); });
+  if(detPrev) detPrev.addEventListener('click', ()=>{ prevDet(); resetDetTimer(); });
+  resetDetTimer();
+}
+
+function initQuotes(){
+  const heroQ = document.getElementById('heroQuote');
+  if(heroQ){
+    const quotes = QUOTE_LIBRARY.heroQuotes; let i = 0;
+    setInterval(()=>{
+      heroQ.style.opacity = '0';
+      setTimeout(()=>{ i = (i+1) % quotes.length; heroQ.textContent = quotes[i].text; heroQ.style.opacity = '1'; }, 500);
+    }, 8000);
+  }
+  buildQuoteRotator('wheelQuotes', document.getElementById('wheelQuoteText'), document.getElementById('wheelQuoteAuthor'), document.getElementById('wheelQuoteDots'), 7000);
+  buildQuoteRotator('pillarQuotes', document.getElementById('pillarQuoteText'), document.getElementById('pillarQuoteAuthor'), document.getElementById('pillarQuoteDots'), 7000);
+  buildQuoteRotator('natureQuotes', document.getElementById('natureQuoteText'), document.getElementById('natureQuoteAuthor'), document.getElementById('natureQuoteDots'), 7000);
+  initDetermination();
+}
+
+/* ═══════ PARTICLES ═══════ */
+const particleCanvas = document.getElementById('particleCanvas');
+let pCtx = null, particles = [];
+function initParticles(){
+  pCtx = particleCanvas.getContext('2d');
+  particleCanvas.width = window.innerWidth; particleCanvas.height = window.innerHeight;
+  particles = [];
+  const count = Math.min(90, Math.floor(window.innerWidth / 20));
+  const colors = ['#bae6fd','#86efac','#fcd34d','#c4b5fd','#ffffff'];
+  for(let i=0;i<count;i++){
+    particles.push({
+      x: Math.random()*particleCanvas.width, y: Math.random()*particleCanvas.height,
+      size: Math.random()*2.4+0.6, speedX: (Math.random()-0.5)*0.32, speedY: (Math.random()-0.5)*0.32,
+      opacity: Math.random()*0.5+0.15, color: colors[Math.floor(Math.random()*colors.length)]
+    });
+  }
+  animateParticles();
+}
+function animateParticles(){
+  if(!pCtx) return;
+  pCtx.clearRect(0,0,particleCanvas.width,particleCanvas.height);
+  for(const p of particles){
+    p.x += p.speedX; p.y += p.speedY;
+    if(p.x<0) p.x=particleCanvas.width; if(p.x>particleCanvas.width) p.x=0;
+    if(p.y<0) p.y=particleCanvas.height; if(p.y>particleCanvas.height) p.y=0;
+    pCtx.beginPath(); pCtx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    pCtx.fillStyle = p.color; pCtx.globalAlpha = p.opacity; pCtx.fill();
+  }
+  pCtx.globalAlpha = 1;
+  requestAnimationFrame(animateParticles);
+}
+
+function initScrollReveal(){
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+  },{ threshold:0.12 });
+  els.forEach(el=>io.observe(el));
+}
+
+/* ═══════ WHEEL DATA ═══════ */
+const wheelData = {
+  blessing: { title: 'The Blessing of the Mountain', role: 'Aashirwad · The First Pillar',
+    text: `Because of the mountain there are <span class="c-green">freshwater rivers</span>. Because of freshwater there is <span class="c-gold">agriculture</span>. Because of agriculture there is <span class="c-snow">food</span>. Because of food there is <span class="c-white">life on the Earth</span>. The <span class="c-saffron">Ganga</span> is from the <span class="c-saffron">Gomukh</span>, the <span class="c-saffron">Yamuna</span> from the <span class="c-saffron">Yamunotri</span> — both have the same source, the <span class="c-green">Himalayas</span>.`,
+    tag: 'Pillar 1 — The Blessing' },
+  mystery: { title: 'The Mystery of the Mountain', role: 'Rahasya · The Second Pillar',
+    text: `Mountain is the <span class="c-mystery">most mysterious place on the Earth</span>. The ocean is 70% of the Earth — but the 2% of the mountain is <span class="c-mystery">more mysterious</span> — because the mountain has <span class="c-white">no way</span>. You have to make your way. The most mysterious part is the <span class="c-violet">Ghati</span> — deeper than the ocean. The <span class="c-snow">dev</span> and <span class="c-mystery">danav</span> — light and darkness — both exist.`,
+    tag: 'Pillar 2 — The Mystery' },
+  beauty: { title: 'The Untouched Beauty', role: 'Saundarya · The Third Pillar',
+    text: `The mountain is <span class="c-gold">untouched</span> — very less touched by humanity and technology. That is why the <span class="c-green">mountain forest</span> survives. The most untouched lands are the <span class="c-snow">Himalaya</span>, the <span class="c-snow">Alaskan mountains</span>, and the <span class="c-saffron">Pradesh</span>. The wildlife is <span class="c-green">secured by the mountain</span> — the <span class="c-gold">Red Panda</span>, the <span class="c-snow">Snow Leopard</span>, and beautiful deer.`,
+    tag: 'Pillar 3 — The Untouched Beauty' },
+  meditation: { title: 'The Meditation of Mountain', role: 'Dhyan · The Fourth Pillar',
+    text: `The <span class="c-snow">mountain is the most perfect, most sacred place</span> for meditation. Even <span class="c-saffron">Adiyogi meditated on the Himalayas</span>. The mountain supports meditation because of its <span class="c-gold">height</span> — the body's distance from the Earth increases — the physicality has <span class="c-green">less impact on the mind</span>. And there, you will <span class="c-white">experience your truth — you will experience your spirit</span>.`,
+    tag: 'Pillar 4 — The Meditation' },
+  aravali: { title: 'Aravali — The Soul of the Mountain', role: 'The Oldest and Most Mysterious',
+    text: `The <span class="c-saffron">Aravali</span> is the <span class="c-gold">oldest</span> and very mysterious mountain. It has a range. There are a lot of wildlife in the Aravali. Aravali is <span class="c-white">not the tallest mountain</span> — but <span class="c-saffron">Aravali is the soul of the mountain</span>. <span class="c-snow">Himalaya</span> has the true wisdom through herbs — but <span class="c-saffron">Aravali has built harmony, greenery, and life</span> for humanity. Both are the <span class="c-green">soul of India</span>.`,
+    tag: 'The Soul of the Mountain' },
+  devbhoomi: { title: 'Uttarakhand — Devbhoomi', role: 'The Land of the God · The Land of the Ghost',
+    text: `The mountain has <span class="c-mystery">darkness</span>, and even the mountain has the <span class="c-gold">top of the light</span>. The rays of the Sun first come on the mountain top, then on the land. <span class="c-saffron">Uttarakhand</span> — <span class="c-snow">Devbhoomi Uttarakhand</span> — the place of God, the land of God — is <span class="c-mystery">also the land of the ghost</span>. The mountains of Uttarakhand are the blessing of <span class="c-saffron">Shiv</span> — the Parmeshwar.`,
+    tag: 'The Land of the God' }
+};
+function initWheel(){
+  const nodes = document.querySelectorAll('.wheel-node');
+  const info = document.getElementById('wheelInfo');
+  nodes.forEach(node=>{
+    node.addEventListener('click', ()=>{
+      nodes.forEach(n=>n.classList.remove('active'));
+      node.classList.add('active');
+      const d = wheelData[node.dataset.region];
+      if(!d) return;
+      info.innerHTML = `<h3>${d.title}</h3><div class="role">${d.role}</div><p>${d.text}</p><div class="pillar-tag">${d.tag}</div>`;
+    });
+  });
+}
+
+/* ═══════ WIKIMEDIA IMAGE LOADER ═══════ */
+async function fetchWikimediaImage(query){
+  try{
+    const resp = await fetch(`https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrnamespace=6&gsrlimit=6&prop=imageinfo&iiprop=url&iiurlwidth=800&format=json&origin=*`);
+    if(!resp.ok) return null;
+    const data = await resp.json();
+    if(data.query && data.query.pages){
+      const pages = Object.values(data.query.pages);
+      for(const page of pages){
+        if(page.imageinfo && page.imageinfo[0]){
+          const ii = page.imageinfo[0];
+          const url = ii.thumburl || ii.url;
+          if(!url) continue;
+          const low = url.toLowerCase();
+          if(low.endsWith('.svg') || low.endsWith('.pdf')) continue;
+          return { url, title: page.title.replace('File:','').replace(/\.[a-z]+$/i,'') };
+        }
+      }
+    }
+    return null;
+  }catch(e){ return null; }
+}
+async function loadWikiImages(){
+  const imgs = document.querySelectorAll('.wiki-img');
+  for(const img of imgs){
+    if(img.dataset.fixedImage === 'true'){ img.style.opacity='1'; continue; }
+    const topic = img.dataset.wiki;
+    if(!topic) continue;
+    img.style.opacity = '0'; img.style.transition = 'opacity .8s ease';
+    const result = await fetchWikimediaImage(topic);
+    if(result && result.url){
+      img.src = result.url; img.alt = result.title || topic;
+      img.onload = ()=>{ img.style.opacity = '1'; };
+      img.onerror = ()=>{ img.src = `https://picsum.photos/seed/${encodeURIComponent(topic)}/800/800`; img.style.opacity='1'; };
+    } else {
+      img.src = `https://picsum.photos/seed/${encodeURIComponent(topic)}/800/800`;
+      img.style.opacity = '1';
+    }
+    await new Promise(r=>setTimeout(r, 120));
+  }
+}
+
+/* ═══════ SEVAK ═══════ */
+const sevakOrb = document.getElementById('sevakOrb');
+const sevakBadge = document.getElementById('sevakBadge');
+const sevakPanel = document.getElementById('sevakPanel');
+const sevakMessages = document.getElementById('sevakMessages');
+const sevakInput = document.getElementById('sevakInput');
+const sevakSend = document.getElementById('sevakSend');
+const sevakMic = document.getElementById('sevakMic');
+const sevakClose = document.getElementById('sevakClose');
+const sevakExpand = document.getElementById('sevakExpand');
+const sevakStatus = document.getElementById('sevakStatus');
+const sevakStatusText = document.getElementById('sevakStatusText');
+const navSevak = document.getElementById('navSevak');
+const fullpageOverlay = document.getElementById('fullpageOverlay');
+const fullpageQuestion = document.getElementById('fullpageQuestion');
+const fullpageAnswer = document.getElementById('fullpageAnswer');
+const fullpageScroll = document.getElementById('fullpageScroll');
+const fullpageCloseBtn = document.getElementById('fullpageCloseBtn');
+const fullpageSpeakBtn = document.getElementById('fullpageSpeakBtn');
+const fullpageCopyBtn = document.getElementById('fullpageCopyBtn');
+const lightboxOverlay = document.getElementById('lightboxOverlay');
+const lightboxImage = document.getElementById('lightboxImage');
+const lightboxCaption = document.getElementById('lightboxCaption');
+const lightboxClose = document.getElementById('lightboxClose');
+
+let isListening = false, isSpeaking = false, isProcessing = false;
+let recognition = null;
+let synthesis = window.speechSynthesis;
+let selectedVoice = null;
+let lastSpeakText = '';
+let panelOpen = false;
+let unreadCount = 1;
+let projectReadAloudOnce = false;
+
+const greetings = ["Namaste Sir, Sevak at your service! How may I guide your mountain wisdom today?","Greetings, Sir! I'm awake and ready. What can I do for you?","Good to see you, Sir! Sevak reporting for duty. What's your command?","Ah, Sir! I was just thinking about the mountains. What do you need?"];
+const thanks = ["You're most welcome, Sir. Anything else?","Always a pleasure to serve, Sir.","It's my honor, Sir. Sevak is here 24/7 for you.","No thanks needed, Sir. That's what I'm built for."];
+const apologies = ["I apologize, Sir. I couldn't process that. Could you rephrase?","My apologies, Sir. I didn't quite catch that. Could you try again?","Sir, I'm sorry but I'm not sure what you mean. Could you be more specific?","Pardon me, Sir. My circuits didn't compute that. Try again?"];
+
+const helpText = `Sir, here are some things you can ask me:<br>
+• <strong>"What is the Wisdom of Mountain?"</strong> · <strong>"What are the four pillars?"</strong><br>
+• <strong>"Tell me about the Blessing of the Mountain"</strong> · <strong>"Why are rivers important?"</strong><br>
+• <strong>"Tell me about the Mystery of the Mountain"</strong> · <strong>"What is Ghati?"</strong><br>
+• <strong>"Tell me about the Untouched Beauty"</strong> · <strong>"Why is the mountain untouched?"</strong><br>
+• <strong>"Tell me about the Meditation of Mountain"</strong> · <strong>"What is Sankalp Shakti?"</strong><br>
+• <strong>"Tell me about Aravali"</strong> · <strong>"Tell me about Himalaya"</strong><br>
+• <strong>"Tell me about Uttarakhand"</strong> · <strong>"What is Devbhoomi?"</strong><br>
+• <strong>"Tell me about the Ganga"</strong> · <strong>"Tell me about the Yamuna"</strong><br>
+• <strong>"What is Dhyan?"</strong> · <strong>"What is Nirvana?"</strong><br>
+• <strong>"Tell me about the dual nature of the mountain"</strong><br>
+• <strong>"What is the human saubhagya?"</strong> · <strong>"Who can do meditation?"</strong><br>
+• <strong>"Read the whole project"</strong> · <strong>"What can SEVAK do?"</strong><br>
+• <strong>"Who is your creator?"</strong> · <strong>"Who are you?"</strong>`;
+
+function getRandomFrom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function getTimeString(){ return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
+function getDateString(){ return new Date().toLocaleDateString([], {weekday:'long',year:'numeric',month:'long',day:'numeric'}); }
+function stripHtml(html){ const tmp = document.createElement('div'); tmp.innerHTML = html || ''; return (tmp.textContent || tmp.innerText || '').replace(/\s+/g,' ').trim(); }
+
+function openLightbox(src, caption){ lightboxImage.src = src; lightboxCaption.textContent = caption || ''; lightboxOverlay.classList.add('active'); }
+function closeLightbox(){ lightboxOverlay.classList.remove('active'); }
+lightboxClose.addEventListener('click', closeLightbox);
+lightboxOverlay.addEventListener('click', e=>{ if(e.target === lightboxOverlay) closeLightbox(); });
+
+function openFullPage(question){
+  fullpageQuestion.textContent = '❯ ' + question;
+  fullpageAnswer.innerHTML = '<div class="fp-loading" style="display:flex;gap:8px;padding:14px 0"><span class="sevak-typing" style="display:inline-flex"><span></span><span></span><span></span></span></div>';
+  fullpageOverlay.classList.add('active'); fullpageScroll.scrollTop = 0;
+  const inner = fullpageOverlay.querySelector('.fullpage-inner');
+  if(inner){ inner.style.animation = 'none'; void inner.offsetWidth; inner.style.animation = ''; }
+}
+function fillFullPage(html, image, imageAlt){
+  if(!fullpageOverlay.classList.contains('active')) return;
+  fullpageAnswer.innerHTML = html || '';
+  if(image){
+    const wrap = document.createElement('div'); wrap.className = 'fullpage-image'; wrap.title = 'Click to enlarge';
+    const img = document.createElement('img'); img.src = image; img.alt = imageAlt || 'Image'; img.loading = 'lazy';
+    img.addEventListener('click', ()=>openLightbox(image, imageAlt || ''));
+    wrap.appendChild(img);
+    if(imageAlt){ const cap = document.createElement('div'); cap.className = 'msg-caption'; cap.textContent = imageAlt; wrap.appendChild(cap); }
+    fullpageAnswer.appendChild(wrap);
+  }
+  fullpageScroll.scrollTop = 0;
+}
+function closeFullPage(){ fullpageOverlay.classList.remove('active'); fullpageSpeakBtn.classList.remove('speaking'); }
+fullpageCloseBtn.addEventListener('click', closeFullPage);
+fullpageSpeakBtn.addEventListener('click', ()=>{
+  if(isSpeaking){ synthesis.cancel(); isSpeaking=false; fullpageSpeakBtn.classList.remove('speaking'); updateStatus('idle'); return; }
+  if(lastSpeakText) speak(lastSpeakText);
+});
+fullpageCopyBtn.addEventListener('click', async ()=>{
+  const text = fullpageAnswer.innerText; if(!text) return;
+  try{ await navigator.clipboard.writeText(text); fullpageCopyBtn.textContent='✅'; }
+  catch(e){ fullpageCopyBtn.textContent='⚠️'; }
+  setTimeout(()=>{ fullpageCopyBtn.textContent='📋'; },1400);
+});
+
+function openPanel(){
+  sevakPanel.classList.add('open'); sevakOrb.classList.add('active');
+  panelOpen = true; unreadCount = 0; sevakBadge.classList.add('hidden');
+  setTimeout(()=>sevakInput.focus(), 300);
+  if(!projectReadAloudOnce){
+    projectReadAloudOnce = true;
+    const welcome = 'Namaste Sir or Madam. I am SEVAK, your Wisdom of Mountain project guide. I have the complete mountain wisdom loaded — the four pillars of Blessing, Mystery, Untouched Beauty, and Meditation; the Aravali and the Himalaya; Uttarakhand the Devbhoomi; the sacred rivers Ganga and Yamuna; the Sankalp Shakti; and the determination. Do you have any query about this project, or would you like to know any topic from the Wisdom of Mountain? I can explain it and read the answer aloud.';
+    addSevakMessage('sevak', '<strong>Complete Mountain Memory Loaded</strong><br>Namaste Sir or Madam. I am ready to explain the Wisdom of Mountain — all four pillars, the Aravali, the Himalaya, the Devbhoomi Uttarakhand, the sacred rivers, the Sankalp Shakti, and the determination. Ask me anything. 🙏');
+    setTimeout(()=>speak(welcome),450);
+  }
+}
+function closePanel(){ sevakPanel.classList.remove('open'); sevakOrb.classList.remove('active'); panelOpen = false; }
+sevakOrb.addEventListener('click', ()=> panelOpen ? closePanel() : openPanel());
+sevakClose.addEventListener('click', closePanel);
+navSevak.addEventListener('click', ()=>{ openPanel(); sevakInput.focus(); });
+sevakExpand.addEventListener('click', ()=>{
+  const lastSevak = [...sevakMessages.querySelectorAll('.sevak-msg.sevak')].pop();
+  if(!lastSevak) return;
+  const html = lastSevak.innerHTML.replace(/<span class="ts">.*?<\/span>/,'');
+  const lastUser = [...sevakMessages.querySelectorAll('.sevak-msg.user')].pop();
+  openFullPage(lastUser ? lastUser.textContent.replace(/\d{1,2}:\d{2}(:\d{2})?\s*(AM|PM)?$/i,'').trim() : 'Answer');
+  fillFullPage(html);
+});
+
+function initSpeechRecognition(){
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SpeechRecognition) return null;
+  const rec = new SpeechRecognition();
+  rec.continuous = false; rec.interimResults = true; rec.lang = 'en-IN'; rec.maxAlternatives = 3;
+  rec.onstart = ()=>{ isListening = true; updateStatus('listening'); sevakMic.classList.add('listening'); };
+  rec.onresult = (event)=>{
+    let finalT = '', interimT = '';
+    for(let i=event.resultIndex;i<event.results.length;i++){
+      const t = event.results[i][0].transcript;
+      if(event.results[i].isFinal) finalT += t; else interimT += t;
+    }
+    if(interimT){ sevakInput.value = interimT; sevakInput.placeholder = interimT; }
+    if(finalT){ sevakInput.value = finalT; stopListening(); processCommand(finalT); }
+  };
+  rec.onerror = (event)=>{
+    if(event.error === 'not-allowed') addSevakMessage('sevak', 'Sir, I need microphone access to hear you. Please enable it in your browser settings. 🙏');
+    else if(event.error !== 'aborted') addSevakMessage('sevak', getRandomFrom(apologies));
+    stopListening();
+  };
+  rec.onend = ()=>{
+    isListening = false; sevakMic.classList.remove('listening');
+    sevakInput.placeholder = 'Ask Sevak about mountains, rivers, Aravali, Himalaya...';
+    updateStatus(isProcessing ? 'processing' : 'idle');
+  };
+  return rec;
+}
+function startListening(){
+  if(isSpeaking){ synthesis.cancel(); isSpeaking=false; }
+  if(isListening){ stopListening(); return; }
+  if(!recognition){ recognition = initSpeechRecognition(); if(!recognition){ addSevakMessage('sevak','Sir, your browser doesn\'t support voice recognition. Please use Chrome or Edge. 💻'); return; } }
+  try{ recognition.start(); }catch(e){ stopListening(); setTimeout(startListening, 300); }
+}
+function stopListening(){ if(recognition){ try{ recognition.stop(); }catch(e){} } isListening=false; sevakMic.classList.remove('listening'); }
+
+function initVoices(){
+  const voices = synthesis.getVoices(); if(!voices.length) return;
+  const preferred = ['Google UK English Female','Google US English Female','Microsoft Zira - English (United States)','Microsoft Aria - English (United States)','Samantha','Karen','Moira','Tessa','Google UK English Male','Google US English Male','Alex','Fred'];
+  for(const pref of preferred){ const v = voices.find(x=>x.name.includes(pref)); if(v){ selectedVoice = v; return; } }
+  selectedVoice = voices.find(v=>v.lang.startsWith('en')) || voices[0];
+}
+function speak(text){
+  if(!synthesis) return; synthesis.cancel();
+  const clean = stripHtml(text); if(!clean) return;
+  const u = new SpeechSynthesisUtterance(clean);
+  if(selectedVoice) u.voice = selectedVoice;
+  u.lang = 'en-IN'; u.rate = 0.93; u.pitch = 1.12; u.volume = 1.0;
+  u.onstart = ()=>{ isSpeaking = true; fullpageSpeakBtn.classList.add('speaking'); updateStatus('speaking'); };
+  u.onend = ()=>{ isSpeaking = false; fullpageSpeakBtn.classList.remove('speaking'); updateStatus(isProcessing ? 'processing' : 'idle'); };
+  u.onerror = ()=>{ isSpeaking = false; fullpageSpeakBtn.classList.remove('speaking'); updateStatus('idle'); };
+  synthesis.speak(u);
+}
+
+function updateStatus(state){
+  sevakStatus.className = 'sevak-status';
+  switch(state){
+    case 'idle': sevakStatus.classList.add('idle'); sevakStatusText.textContent='Ready'; break;
+    case 'listening': sevakStatus.classList.add('listening'); sevakStatusText.textContent='Listening'; break;
+    case 'speaking': sevakStatus.classList.add('speaking'); sevakStatusText.textContent='Speaking'; break;
+    case 'processing': sevakStatus.classList.add('processing'); sevakStatusText.textContent='Thinking'; break;
+    default: sevakStatusText.textContent='Ready';
+  }
+}
+
+function addSevakMessage(type, html, image, imageAlt){
+  const msg = document.createElement('div');
+  msg.className = 'sevak-msg ' + type; msg.innerHTML = html;
+  if(image){
+    const wrap = document.createElement('div'); wrap.className = 'msg-img'; wrap.title = 'Click to enlarge';
+    const img = document.createElement('img'); img.src = image; img.alt = imageAlt || 'Image'; img.loading='lazy';
+    img.addEventListener('click', ()=>openLightbox(image, imageAlt || ''));
+    wrap.appendChild(img);
+    if(imageAlt){ const cap = document.createElement('div'); cap.className = 'msg-caption'; cap.textContent = imageAlt; wrap.appendChild(cap); }
+    msg.appendChild(wrap);
+  }
+  const ts = document.createElement('span'); ts.className = 'ts'; ts.textContent = getTimeString();
+  msg.appendChild(ts);
+  sevakMessages.appendChild(msg); sevakMessages.scrollTop = sevakMessages.scrollHeight;
+  if(!panelOpen && type === 'sevak'){ unreadCount++; sevakBadge.textContent = unreadCount; sevakBadge.classList.remove('hidden'); }
+  return msg;
+}
+function addTypingIndicator(){
+  const div = document.createElement('div'); div.className = 'sevak-typing'; div.id = 'sevakTyping';
+  div.innerHTML = '<span></span><span></span><span></span>';
+  sevakMessages.appendChild(div); sevakMessages.scrollTop = sevakMessages.scrollHeight;
+  return div;
+}
+function removeTypingIndicator(){ const t = document.getElementById('sevakTyping'); if(t) t.remove(); }
+
+/* ═══════ PROJECT MEMORY ═══════ */
+const PROJECT_MEMORY = {
+  name:'The Wisdom of Mountain',
+  assistant:'SEVAK IVA (Intelligent Voice Assistant)',
+  creator:'Ayush Kumar Jha',
+  mission:'Mountains are part of the heart of Nature. The four pillars are Blessing, Mystery, Untouched Beauty, and Meditation. Aravalli is the soul, Himalaya is the wisdom, and Arunachal Pradesh is the living forest spirit of India.',
+  pillars:[
+    'Pillar 1 — The Blessing of the Mountain (rivers, agriculture, fertile land)',
+    'Pillar 2 — The Mystery of the Mountain (Ghati, dual nature, Arunachal Pradesh forests and the mystery of day and night)',
+    'Pillar 3 — The Untouched Beauty (Himalaya, Arunachal Pradesh, rivers, forests and wildlife)',
+    'Pillar 4 — The Meditation of Mountain (Dhyan, Sankalp Shakti, Adiyogi)'
+  ],
+  features:['Four-pillar wheel','Blessing section','Mystery section','Untouched Beauty section','Meditation section','Aravalli, Himalaya & Arunachal Pradesh section','Uttarakhand — Devbhoomi section','Determination carousel','Rotating quotes','Brightness toggle','Particle canvas','Voice input + speech output','Wikipedia lookup + Wikimedia images']
+};
+
+function projectReadout(){
+  return 'This is the Wisdom of Mountain project. It teaches four pillars: the Blessing, Mystery, Untouched Beauty, and Meditation of Mountain. Arunachal Pradesh deepens the Mystery pillar through its Eastern Himalayan mountains, dense forests, deep valleys, mist and the striking contrast between sunlit dawn and shadowy night. Its forests are also a source of extraordinary beauty and biodiversity, including protected habitats such as Namdapha. Aravalli is the soul, Himalaya is the wisdom, and Arunachal Pradesh is the living forest spirit in this project. The mystery is an invitation to respect nature, not to treat forests as evil or claim that ghosts are proven. Our determination is to love our mountains, rivers, forests and wildlife, and maintain the beauty of the Earth.';
+}
+function projectOverviewHTML(){
+  return `<strong>${PROJECT_MEMORY.name}</strong><br><br>${PROJECT_MEMORY.mission}<br><br><strong>Assistant:</strong> ${PROJECT_MEMORY.assistant}<br><strong>Creator:</strong> ${PROJECT_MEMORY.creator}<br><br><strong>Four Pillars:</strong><br>1. ${PROJECT_MEMORY.pillars[0]}<br>2. ${PROJECT_MEMORY.pillars[1]}<br>3. ${PROJECT_MEMORY.pillars[2]}<br>4. ${PROJECT_MEMORY.pillars[3]}<br><br><strong>Features:</strong><br>${PROJECT_MEMORY.features.map(f=>'• '+f).join('<br>')}`;
+}
+
+/* ═══════ MOUNTAIN KNOWLEDGE BASE ═══════ */
+const mountainKB = [
+  { match:/(wisdom of mountain|about this project|project overview|mountain project)/i, wiki:'Mountain',
+    html:`<strong>The Wisdom of Mountain</strong><br><br>
+    Mountains are the part of the <strong>heart of Nature</strong> — the nature of Earth. If we consider the 30% of the land nature of the Earth, then this is the blessing. This is the blessing for our planet, our beautiful lovely Earth.<br><br>
+    <strong>The Four Pillars:</strong><br>
+    💧 <strong>The Blessing</strong> — rivers, agriculture, life<br>
+    🌫️ <strong>The Mystery</strong> — the Ghati, the dual nature<br>
+    🌿 <strong>The Untouched Beauty</strong> — the mountain forest<br>
+    🧘 <strong>The Meditation</strong> — Dhyan, Sankalp Shakti<br><br>
+    <strong>Aravali</strong> is the soul — <strong>Himalaya</strong> is the wisdom — both are the soul of India.`,
+    speak:'The Wisdom of Mountain teaches four pillars: the Blessing, the Mystery, the Untouched Beauty, and the Meditation. Mountains are the part of the heart of Nature. Aravali is the soul of the mountain — Himalaya is the wisdom. Both are the soul of India.' },
+
+  { match:/(four pillars|4 pillars|main pillars)/i, wiki:'Mountain',
+    html:`<strong>The Four Pillars of Mountain Wisdom</strong><br><br>
+    <strong>1. The Blessing of the Mountain</strong> — Because of the mountain there are rivers, agriculture, fertile land, and life on Earth.<br><br>
+    <strong>2. The Mystery of the Mountain</strong> — The Ghati is deeper than the ocean. The mountain has no way — you have to make your way.<br><br>
+    <strong>3. The Untouched Beauty</strong> — Very less touched by humanity and technology. That is why the mountain forest survives.<br><br>
+    <strong>4. The Meditation of Mountain</strong> — Even Adiyogi meditated on the Himalayas. The Sankalp Shakti becomes stronger.`,
+    speak:'The four pillars are: the Blessing of the Mountain, the Mystery of the Mountain, the Untouched Beauty, and the Meditation of Mountain. Each pillar is a complete wisdom.' },
+
+  { match:/(blessing of the mountain|first pillar|tell me about the blessing)/i, wiki:'Himalayas',
+    html:`<strong>The Blessing of the Mountain</strong><br><br>
+    Because of the mountain there are a lot of <strong>freshwater rivers</strong> on our Earth. This is the most beautiful blessing of the mountain. Because of this we have <strong>drinkable water</strong>, we have water for cooking, we have water for several tasks.<br><br>
+    Because of freshwater there is <strong>agriculture</strong>, there are <strong>fertile lands</strong>. So the mountain is also connected with our <strong>food sources</strong>.<br><br>
+    In India, the <strong>Ganga</strong> is from the <strong>Gomukh</strong>, the <strong>Yamuna</strong> from the <strong>Yamunotri</strong> — both have the same source: the <strong>Himalayas</strong>. The rivers that come from the Himalayas make the land very fertile for agriculture, for the Green Revolution, for natural beauties.<br><br>
+    The <strong>Himalayas</strong> are the greatest mountain of India. Because of the Himalayas there is <strong>no winter on the northern surface of India</strong> — Punjab, Haryana, Uttar Pradesh, Bihar, Bengal are not cold, they are very fertile.`,
+    speak:'The first pillar is the Blessing of the Mountain. Because of the mountain there are freshwater rivers. Because of freshwater there is agriculture, there is fertile land, there is food, there is life. The Ganga is from the Gomukh, the Yamuna from the Yamunotri — both from the Himalayas. Because of the Himalayas the northern plains of India are fertile.' },
+
+  { match:/(himalaya|himalayas)/i, wiki:'Himalayas',
+    html:`<strong>The Himalayas — The Greatest Mountain of India</strong><br><br>
+    The <strong>Himalayas</strong> are the greatest mountain of India. Because of the Himalayas there is <strong>no winter on the northern surface of India</strong> — Punjab, Haryana, Uttar Pradesh, Bihar, and Bengal are not cold, they are very fertile.<br><br>
+    The Himalayas are always the <strong>source of India's most sacred rivers</strong> — the Ganga, the Yamuna, the Brahmaputra, the Godavari, the Narmada, the Krishna, the Kaveri.<br><br>
+    The Himalayas also hold the true <strong>wisdom through herbs</strong> for our health.`,
+    speak:'The Himalayas are the greatest mountain of India. Because of the Himalayas there is no winter on the northern surface of India. The Himalayas are the source of India\'s most sacred rivers. The Himalayas also hold the true wisdom through herbs for our health.' },
+
+  { match:/(arunachal|namdapha|eastern himalaya forest|forest of mystery|ghost forest|god forest)/i, wiki:'Namdapha National Park',
+    html:`<strong>Arunachal Pradesh — The Mystery and Beauty of the Eastern Himalaya</strong><br><br>
+    Arunachal Pradesh lies in India's Eastern Himalaya and is known for steep mountains, deep valleys, heavy rainfall, dense forests and rich biodiversity. Forests protected in <strong>Namdapha National Park</strong> support varied habitats and wildlife. The land can feel mysterious because mist hides ridgelines, forest sounds travel through darkness, and rivers carve routes through remote valleys.<br><br>
+    In the language of this project, <strong>“ghost forest”</strong> describes the eerie feeling of a shadowy forest at night, while <strong>“God forest”</strong> expresses reverence for the life and beauty it holds. These are poetic interpretations, not claims that supernatural beings have been proven to exist. Dawn brings light across the eastern mountains; night brings shadows, silence and wonder. Both are part of nature's dual beauty.<br><br>
+    <strong>Wildlife and care:</strong> the Eastern Himalaya supports many species, including red pandas in suitable high-elevation habitats and many birds, mammals, reptiles and plants. Respect local communities, protected-area rules and wildlife; never disturb or feed wild animals.`,
+    speak:'Arunachal Pradesh is part of the Eastern Himalaya, with steep mountains, deep valleys, dense forests, rivers and rich biodiversity. In our project, ghost forest describes the mysterious feeling of the forest at night, while God forest expresses reverence for its life and beauty. These are poetic ideas, not proof of ghosts. At dawn, sunlight reaches the eastern mountains; at night, shadows and forest sounds create wonder. We should protect its wildlife, respect local communities and keep these forests alive.' },
+
+  { match:/(mystery of the mountain|second pillar|tell me about the mystery)/i, wiki:'Valley',
+    html:`<strong>The Mystery of the Mountain</strong><br><br>
+    Mountain is the <strong>most mysterious place on the Earth</strong>. Mountain is the most mysterious encounter of the human on the Earth — even more mysterious than the ocean. The ocean is 70% of the Earth — however the 2% of the mountain is much more mysterious than the 70% of the ocean — <strong>because the mountain has no way. You have to make your way in the mountain.</strong><br><br>
+    The most mysterious part of the mountain is not their wildlife, not their greenery, not their forest. The most mysterious part is the <strong>Ghati</strong> of the mountain.<br><br>
+    <strong>Ghati</strong> is the Sanskrit word — when you will see from the top of the mountain to the bottom, you will realise how they are fearful and how they are mistake — <strong>how there is more deeper than the ocean</strong>.`,
+    speak:'The second pillar is the Mystery of the Mountain. Mountain is the most mysterious place on the Earth. The ocean is 70% of the Earth, but the 2% of the mountain is much more mysterious — because the mountain has no way. The most mysterious part is the Ghati — the valley — deeper than the ocean.' },
+
+  { match:/(ghati|valley|deepest mystery)/i, wiki:'Valley',
+    html:`<strong>The Ghati — Deeper Than the Ocean</strong><br><br>
+    <strong>Ghati</strong> is the Sanskrit word for the mountain valley. When you will see from the top of the mountain to the bottom, you will realise how they are fearful and how they are mistake — <strong>how there is more deeper than the ocean</strong>.<br><br>
+    This is speculation. There are a lot of mysteries of the mountain — there are a lot of falls of the mountains, there are very mysterious surfaces on the Earth of the mountain.`,
+    speak:'The Ghati is the Sanskrit word for the mountain valley. Its depth is greater than the deepest ocean. There are many falls, many hidden surfaces, many mysteries in the mountain.' },
+
+  { match:/(dual nature|dev and danav|god and demon|ram and ravan)/i, wiki:'Mountains',
+    html:`<strong>The Dual Nature of the Mountain</strong><br><br>
+    The mountain has <strong>darkness</strong>, and even the mountain has the <strong>top of the light</strong>. The rays of the Sun first come on the mountain — on the top of the mountain — then on the land.<br><br>
+    We have to understand the <strong>dual nature of the mountain</strong>. We have both — <strong>Dev and Danav, God and Demon</strong>. This is the true nature — where the balance of God and Demon, <strong>Shri Ramchandra and Ravan</strong>, both are necessary for the Earth.<br><br>
+    When we will understand that, there will be no question. There will be no queries. <strong>There is only solution.</strong>`,
+    speak:'The mountain has darkness, and even the mountain has the top of the light. We have to understand the dual nature of the mountain — Dev and Danav, God and Demon. This is the true nature. Shri Ramchandra and Ravan — both are necessary for the Earth.' },
+
+  { match:/(untouched beauty|third pillar|tell me about the beauty)/i, wiki:'Himalayas',
+    html:`<strong>The Untouched Beauty of the Mountain</strong><br><br>
+    The touching and encounter with the beauty of the nature of the mountain is <strong>difficult for the humanity</strong>, human technology, and human development. That is why humanity can develop the technology on the flat land — but the mountain is still very hard for them.<br><br>
+    That is why the <strong>beauty of the nature of the mountain is untouched</strong> and less encountered — and we can feel it, we can experience it.<br><br>
+    The most untouched lands of the mountains are the <strong>Himalayas</strong>, the <strong>Alaskan Mountains</strong>, and the <strong>Pradesh</strong>. The wildlife is secured by the mountain — the <strong>Red Panda</strong>, the <strong>Snow Leopard</strong>, a lot of beautiful deer.`,
+    speak:'The third pillar is the Untouched Beauty of the Mountain. The encounter with the mountain is difficult for humanity. That is why the beauty is untouched. The most untouched lands are the Himalayas, the Alaskan Mountains, and the Pradesh. The wildlife is secured by the mountain — the Red Panda, the Snow Leopard, and beautiful deer.' },
+
+  { match:/(meditation of mountain|fourth pillar|tell me about the meditation|parvat dhyan)/i, wiki:'Meditation',
+    html:`<strong>The Meditation of Mountain</strong><br><br>
+    In India, even on the Earth, there are a lot of <strong>saints</strong>, there are a lot of <strong>Maharishis</strong>, there are a lot of <strong>Yogis</strong>. Even <strong>Adiyogi meditated on the Himalayas</strong>.<br><br>
+    Mountain is the <strong>most perfect place</strong>, the <strong>most sacred place</strong>, for the meditation — for Dhyan.<br><br>
+    Dhyan does not mean that other places are not perfect. But we have to understand that meditation is part of our mind. Your mind is doing meditation — Dhyan. There is no relation with physical. There is no need of physical strength. You should have to be <strong>mentally strong</strong>.`,
+    speak:'The fourth pillar is the Meditation of Mountain. Even Adiyogi meditated on the Himalayas. Mountain is the most perfect and most sacred place for meditation. Meditation is part of our mind. There is no need of physical strength — you should have to be mentally strong.' },
+
+  { match:/(sankalp shakti|determination strength|strongest energy)/i, wiki:'Determination',
+    html:`<strong>Sankalp Shakti — The Strongest Energy</strong><br><br>
+    When you climb on the mountain, when you live on the mountains, when you survive on the mountain — our body is trained, our body becomes much stronger, our strength becomes stronger, our heart will become stronger, our <strong>determination gets strength</strong>.<br><br>
+    <strong>Sankalp Shakti</strong> — the strongest strength of human life — becomes stronger.<br><br>
+    Sankalp Shakti is the strongest energy of human life.`,
+    speak:'Sankalp Shakti is the strongest energy of human life. When you climb the mountain, when you survive on the mountain, your body becomes stronger, your heart becomes stronger, and your determination — your Sankalp Shakti — becomes stronger.' },
+
+  { match:/(aravali)/i, wiki:'Aravalli Range',
+    html:`<strong>Aravali — The Soul of the Mountain</strong><br><br>
+    The <strong>Aravali Mountain</strong> is the <strong>oldest</strong> and very mysterious mountain. Aravali has a range. Aravali is the very, very oldest.<br><br>
+    There are a lot of <strong>wildlife in the Aravali</strong>. Aravali is not the tallest mountain, not the tallest mountain — <strong>but Aravali is the soul of the mountain</strong>.<br><br>
+    Aravali has the most life among all mountains. The Himalayas have the true wisdom through herbs for our health. But <strong>Aravali has built harmony, greenery, and life for humanity</strong>.`,
+    speak:'The Aravali is the oldest and very mysterious mountain. Aravali has a range. There are a lot of wildlife in the Aravali. Aravali is not the tallest mountain, but Aravali is the soul of the mountain. Aravali has built harmony, greenery, and life for humanity.' },
+
+  { match:/(aravali.*himalaya|himalaya.*aravali|soul of india)/i, wiki:'Aravalli Range',
+    html:`<strong>Aravali and Himalaya — The Soul of India</strong><br><br>
+    That is why I am saying — <strong>Himalaya and Aravali — Himalaya as well as Aravali — Himalaya as well as Aravali of India — are the soul of India</strong>.<br><br>
+    Because of this India has <strong>harmony</strong>. India has the <strong>true wisdom</strong>. And the wisdom is the way of <strong>Nirvana</strong>.<br><br>
+    <strong>Aravali</strong> is the soul of the mountain.<br>
+    <strong>Himalaya</strong> is the wisdom of the mountain.`,
+    speak:'Himalaya and Aravali — both are the soul of India. Because of this India has harmony. India has the true wisdom. And the wisdom is the way of Nirvana. Aravali is the soul of the mountain. Himalaya is the wisdom of the mountain.' },
+
+  { match:/(uttarakhand|devbhoomi|land of god|land of ghost)/i, wiki:'Uttarakhand',
+    html:`<strong>Uttarakhand — Devbhoomi</strong><br><br>
+    <strong>Uttarakhand — Devbhoomi Uttarakhand — the place of the God, the land of the God — is also the land of the ghost.</strong><br><br>
+    There are a lot of mountains in Uttarakhand that are <strong>bhautik</strong> — that are the horror on the Earth. Uttarakhand is the place — the mountains of Uttarakhand are the blessing of the God — the <strong>Shiv, the Parmeshwar</strong>.<br><br>
+    We have to understand the <strong>dual nature of the mountain</strong>. We have both — <strong>Dev and Danav, God and Demon</strong>.`,
+    speak:'Uttarakhand is the Devbhoomi — the land of the God. But it is also the land of the ghost. There are a lot of mountains in Uttarakhand that are bhautik — that are the horror on the Earth. The mountains of Uttarakhand are the blessing of Shiv — the Parmeshwar. We have to understand the dual nature of the mountain.' },
+
+  { match:/(ganga|ganges)/i, wiki:'Ganges',
+    html:`<strong>Ganga — The Sacred River of India</strong><br><br>
+    In India, the <strong>Ganga</strong> is from the <strong>Gomukh</strong>. The Ganga is one of India's most sacred rivers — she flows from the <strong>Himalayas</strong>, the greatest mountain of India.<br><br>
+    The Ganga makes the land very <strong>fertile for agriculture</strong>. Because of the Ganga there is the <strong>Green Revolution</strong> — because of the Ganga there are the natural beauties.`,
+    speak:'The Ganga is from the Gomukh. She flows from the Himalayas — the greatest mountain of India. The Ganga makes the land very fertile for agriculture. Because of the Ganga there is the Green Revolution. Because of the Ganga there are the natural beauties.' },
+
+  { match:/(yamuna)/i, wiki:'Yamuna',
+    html:`<strong>Yamuna — The Sacred River of India</strong><br><br>
+    The <strong>Yamuna</strong> is from the <strong>Yamunotri</strong>. Both the Ganga and the Yamuna have the same source — the <strong>Himalayas</strong>.<br><br>
+    The rivers that come from the Himalayas make the land very fertile for agriculture, for the Green Revolution, for natural beauties.`,
+    speak:'The Yamuna is from the Yamunotri. Both the Ganga and the Yamuna have the same source — the Himalayas. The rivers that come from the Himalayas make the land very fertile for agriculture, for the Green Revolution, for natural beauties.' },
+
+  { match:/(dhyan|what is dhyan|meditation meaning)/i, wiki:'Dhyana in Buddhism',
+    html:`<strong>Dhyan — The Meditation</strong><br><br>
+    Dhyan does not mean that other places are not perfect. But we have to understand that <strong>meditation is part of our mind</strong>. Your mind is doing meditation — Dhyan.<br><br>
+    There is <strong>no relation with physical</strong>. There is no need of physical strength. You should have to be <strong>mentally strong</strong>. Mental strength will be high.<br><br>
+    But in the <strong>Yoga Sutra</strong>, in the <strong>Yoga</strong>, we have to understand that because of our physical body, our mind exists. Without physical body there is no existence of our mind.<br><br>
+    That is why <strong>physical bodies are also very necessary</strong> — very important. That is why you have to train our physical body also for the hard difficulties.`,
+    speak:'Dhyan is the meditation. Your mind is doing meditation. There is no relation with physical. You should have to be mentally strong. But in the Yoga Sutra, because of our physical body, our mind exists. Without physical body there is no existence of our mind. So physical bodies are also very necessary.' },
+
+  { match:/(nirvana)/i, wiki:'Nirvana',
+    html:`<strong>Nirvana — The Way of Wisdom</strong><br><br>
+    <strong>Wisdom is the way of Nirvana.</strong> Because of the mountain there is harmony. India has the true wisdom. And the wisdom is the way of Nirvana.<br><br>
+    If you understand the wisdom of the universe, if you <strong>experience the silence and peace of the existence</strong> — this is the true experience. This is the supreme experience. Supreme knowledge.`,
+    speak:'Wisdom is the way of Nirvana. Because of the mountain there is harmony. India has the true wisdom. And the wisdom is the way of Nirvana. If you experience the silence and peace of the existence — this is the true experience. This is the supreme experience.' },
+
+  { match:/(adivasi|tribal|tribe|mountain people)/i, wiki:'Adivasi',
+    html:`<strong>The Tribal Human Race of the Mountain</strong><br><br>
+    There are a lot of <strong>tribals</strong>, a lot of human races, a lot of animal kingdoms on the mountain which are <strong>totally untouched</strong>. They are totally out of the network from human development.<br><br>
+    But they are <strong>much more immune</strong>. They have more technical immunity, developed immunity — because they are <strong>deeply connected with the true nature — the true nature of the Earth</strong>.<br><br>
+    That is why I am always saying — <strong>always connect with the Nature. Always connect with the component of the Nature.</strong>`,
+    speak:'There are a lot of tribals on the mountain which are totally untouched. They are out of the network from human development. But they are much more immune — they have developed immunity because they are deeply connected with the true nature of the Earth. That is why I am always saying — always connect with the Nature.' },
+
+  { match:/(wildlife of the mountain|mountain wildlife|red panda|snow leopard)/i, wiki:'Snow leopard',
+    html:`<strong>The Wildlife of the Mountain</strong><br><br>
+    The wildlife of the mountain is <strong>secured by the mountain itself</strong>. There are a lot of wildlife on the mountains — even on the Himalaya — the <strong>Red Panda</strong>, the <strong>Snow Leopard</strong>, a lot of <strong>beautiful deer</strong>.<br><br>
+    This is the <strong>true nature of the Himalaya</strong>. This is the true nature of the mountain. They are protected by the <strong>difficulty of approach</strong>.`,
+    speak:'The wildlife of the mountain is secured by the mountain itself. There are a lot of wildlife on the mountains — even on the Himalaya — the Red Panda, the Snow Leopard, and beautiful deer. This is the true nature of the Himalaya. They are protected by the difficulty of approach.' },
+
+  { match:/(determination|our determination|love mountain)/i, wiki:'Mountain',
+    html:`<strong>◆ Our Determination ◆</strong><br><br>
+    We have understood the mountains are much essential for our life. They are the part of the <strong>honour, respect, and love</strong> for us. They are the <strong>blessing</strong> of us. They give everything what they can give — <strong>without any self-interest</strong>.<br><br>
+    That is why Nature is the <strong>true love</strong>. That is why we call Nature the <strong>Mother — Mother Nature</strong>. Because of her attitude, because of her kindness to all our life — they give everything without any self-interest.<br><br>
+    <strong>So let's we have to determine that we will love our mountains. We will love our Nature, our rivers, our forest, our jungle — even our wildlife. They are also necessary for the Earth. Even we human — humans are also the part of the Nature of the Earth. Love and harmony should also be on our Earth. This is the most essential experience for the living being.</strong>`,
+    speak:'Our determination. We have understood the mountains are much essential for our life. They are the blessing of us. They give everything without any self-interest. That is why Nature is the true love. So let us determine that we will love our mountains. We will love our Nature, our rivers, our forest, our jungle, our wildlife. We human are also the part of the Nature of the Earth. Love and harmony should also be on our Earth.' },
+
+  { match:/(who are you|your name|what is sevak)/i, wiki:'Virtual assistant',
+    html:`<strong>I am SEVAK IVA</strong> — the Intelligent Voice Assistant of the Wisdom of Mountain project.<br><br>
+    I am your complete guide to:<br>
+    💧 The Blessing of the Mountain<br>
+    🌫️ The Mystery of the Mountain<br>
+    🌿 The Untouched Beauty<br>
+    🧘 The Meditation of Mountain<br>
+    🏔️ Aravali · Himalaya · Uttarakhand<br><br>
+    I can explain every topic, read answers aloud, search Wikipedia, show images, tell quotes, and take you to any section.<br><br>
+    <strong>Created by:</strong> Ayush Kumar Jha`,
+    speak:'I am SEVAK IVA, the Intelligent Voice Assistant of the Wisdom of Mountain project. I am your complete guide to the four pillars — the Blessing, the Mystery, the Untouched Beauty, and the Meditation of Mountain. I was created by Ayush Kumar Jha.' },
+
+  { match:/(who is your creator|who created you|who made you|your creator)/i, wiki:'Software developer',
+    html:`<strong>My Creator</strong><br><br>
+    My creator is <strong>Ayush Kumar Jha</strong>.<br><br>
+    He built the Wisdom of Mountain project and brought me — SEVAK IVA — into existence as the Intelligent Voice Assistant that serves every seeker of the mountain's wisdom.`,
+    speak:'My creator is Ayush Kumar Jha. He built the Wisdom of Mountain project and brought me, SEVAK IVA, into existence as the Intelligent Voice Assistant that serves every seeker of the mountain\'s wisdom.' },
+
+  { match:/(jai shree ram|jai shri ram|jai jai ram)/i, wiki:'Ram',
+    html:`<strong>🙏 Jai Shree Ram 🙏</strong><br><br>
+    <em>"We will love our mountains. We will love our Nature. We will maintain the beauty of the Earth."</em><br><br>
+    May the mountain bless you with wisdom, peace, and Nirvana.<br><br>
+    🏔️ <strong>The Wisdom of Mountain — the blessing of the Earth.</strong>`,
+    speak:'Jai Shree Ram. We will love our mountains. We will love our Nature. We will maintain the beauty of the Earth. May the mountain bless you with wisdom, peace, and Nirvana. The Wisdom of Mountain — the blessing of the Earth.' }
+];
+
+async function answerMountain(cmd){
+  for(const item of mountainKB){
+    if(item.match.test(cmd)){
+      let image = null, imageAlt = null;
+      if(item.wiki){ const r = await fetchWikimediaImage(item.wiki); if(r){ image = r.url; imageAlt = r.title; } }
+      return { html:item.html, image, imageAlt, speakText:item.speak };
+    }
+  }
+  return null;
+}
+
+/* ═══════ EXTERNAL APIs ═══════ */
+async function fetchWikipediaSummary(topic){
+  try{
+    const r = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(topic)}`);
+    if(!r.ok) return null;
+    const d = await r.json();
+    if(d.extract && d.extract.length > 0){
+      return { title: d.title, extract: d.extract, url: d.content_urls?.desktop?.page || `https://en.wikipedia.org/wiki/${encodeURIComponent(topic)}`, thumbnail: d.thumbnail?.source || null, originalImage: d.originalimage?.source || null };
+    }
+    return null;
+  }catch(e){ return null; }
+}
+async function searchWikipedia(query){
+  try{
+    const r = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*&srlimit=5`);
+    if(!r.ok) return null;
+    const d = await r.json();
+    if(d.query?.search?.length) return fetchWikipediaSummary(d.query.search[0].title);
+    return null;
+  }catch(e){ return null; }
+}
+async function fetchDuckDuckGoAnswer(query){
+  try{
+    const r = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`);
+    if(!r.ok) return null;
+    const d = await r.json();
+    if(d.AbstractText) return d.AbstractText;
+    if(d.Answer) return d.Answer;
+    return null;
+  }catch(e){ return null; }
+}
+async function getWeather(city){
+  try{
+    const g = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`);
+    const gd = await g.json();
+    if(!gd.results?.length) return null;
+    const { latitude, longitude, name } = gd.results[0];
+    const w = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
+    const wd = await w.json();
+    const temp = wd.current_weather.temperature; const windspeed = wd.current_weather.windspeed; const code = wd.current_weather.weathercode;
+    let condition = 'Clear';
+    if(code<=3) condition='Clear'; else if(code<=48) condition='Foggy'; else if(code<=67) condition='Rainy'; else if(code<=77) condition='Snowy'; else if(code<=82) condition='Showers'; else if(code<=86) condition='Thunderstorm';
+    return { name, temp, windspeed, condition };
+  }catch(e){ return null; }
+}
+
+const jokes = ["Why don't scientists trust atoms? Because they make up everything!","Why did the developer go broke? Because he lost his domain in a bet.","What's a computer's favorite beat? An algo-rhythm.","I'm reading a book on anti-gravity. It's impossible to put down!","Parallel lines have so much in common. It's a shame they'll never meet.","What's the best thing about Switzerland? I don't know, but the flag is a big plus.","A SQL query walks into a bar, goes up to two tables and asks, 'Can I join you?'","There are only 10 kinds of people in this world: those who understand binary and those who don't.","Did you hear about the claustrophobic astronaut? He just needed a little space.","I invented a new word: plagiarism!"];
+const quotes = ["The only way to do great work is to love what you do. – Steve Jobs","Believe you can and you're halfway there. – Theodore Roosevelt","It does not matter how slowly you go as long as you do not stop. – Confucius","Success is not final, failure is not fatal: it is the courage to continue that counts. – Winston Churchill","The future belongs to those who believe in the beauty of their dreams. – Eleanor Roosevelt","Don't watch the clock; do what it does. Keep going. – Sam Levenson","The best way to predict the future is to invent it. – Alan Kay","You are never too old to set another goal or to dream a new dream. – C.S. Lewis","Act as if what you do makes a difference. It does. – William James","What you get by achieving your goals is not as important as what you become by achieving your goals. – Zig Ziglar"];
+const facts = ["Honey never spoils. Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still perfectly edible.","A day on Venus is longer than a year on Venus.","Octopuses have three hearts and blue blood.","The first oranges weren't orange; they were green.","The human brain uses about 20% of the body's oxygen and 25% of its glucose.","A group of flamingos is called a 'flamboyance'.","The moon has moonquakes.","Hot water freezes faster than cold water under certain conditions (Mpemba effect).","There are more possible iterations of a game of chess than there are atoms in the known universe."];
+
+async function processCommand(command){
+  const raw = command.trim().toLowerCase();
+  if(!raw) return;
+  addSevakMessage('user', command.trim());
+  sevakInput.value = '';
+  isProcessing = true; updateStatus('processing'); addTypingIndicator();
+  await new Promise(r=>setTimeout(r, 400 + Math.random()*500));
+  try{
+    const response = await handleCommand(raw, command.trim());
+    removeTypingIndicator();
+    const speechSource = response.speakText || response.text || (response.html ? stripHtml(response.html) : '');
+    lastSpeakText = stripHtml(speechSource).slice(0, 800);
+    if(response.html || response.image){ addSevakMessage('sevak', response.html || response.text || '', response.image, response.imageAlt); }
+    else if(response.text){ addSevakMessage('sevak', response.text); }
+    if(lastSpeakText) speak(lastSpeakText);
+    if(response.action === 'scrollTo'){ setTimeout(()=>document.getElementById(response.target)?.scrollIntoView({behavior:'smooth',block:'start'}),250); }
+    if(response.action === 'openWebsite'){ setTimeout(()=>window.open(response.url,'_blank'), 700); }
+  }catch(err){
+    console.error(err); removeTypingIndicator();
+    const f = getRandomFrom(apologies); lastSpeakText = f;
+    addSevakMessage('sevak', f); speak(f);
+  }
+  isProcessing = false; updateStatus('idle');
+}
+
+async function handleCommand(rawCmd, originalCmd){
+  if(/^(hello|hi|hey|namaste|good\s*(morning|afternoon|evening))/.test(rawCmd)) return { text: getRandomFrom(greetings) };
+  if(/(how are you|how's it going)/.test(rawCmd)) return { text: getRandomFrom(["I'm doing wonderfully, Sir!","I'm fantastic, Sir!","I'm at peak performance, Sir!"]) };
+  if(/(i am fine|i'm fine|doing well)/.test(rawCmd)) return { text: getRandomFrom(["That's wonderful to hear, Sir!","Excellent, Sir!","Glad to know, Sir!"]) };
+  if(/(thank|thanks|dhanyavad)/.test(rawCmd)) return { text: getRandomFrom(thanks) };
+  if(/(bye|goodbye|good\s*night)/.test(rawCmd)) return { text: "Goodbye Sir! Stay connected with the mountains. 🏔️ Jai Shree Ram." };
+  if(/\b(help|assist|what can you do)\b/.test(rawCmd)) return { text: helpText };
+  if(/(read|explain|describe|tell me about|what is)\s+(the\s+)?(whole|entire|complete|full)?\s*(project|website)/.test(rawCmd) || /(about this project|project features)/.test(rawCmd)) {
+    return { html: projectOverviewHTML(), speakText: projectReadout() };
+  }
+  if(/(which section|take me to|go to)\s+(.+)/.test(rawCmd)) {
+    const q = rawCmd.match(/(?:which section|take me to|go to)\s+(.+)/)[1];
+    const routes = [
+      {r:/wheel|pillar|door/,id:'wheel',name:'Four Pillars'},
+      {r:/blessing|river|ganga|yamuna/,id:'blessing',name:'The Blessing of the Mountain'},
+      {r:/mystery|ghati|dual/,id:'mystery',name:'The Mystery of the Mountain'},
+      {r:/beauty|untouched|wildlife/,id:'beauty',name:'The Untouched Beauty'},
+      {r:/meditation|dhyan|sankalp/,id:'meditation',name:'The Meditation of Mountain'},
+      {r:/aravali|aravalli|himalaya|arunachal|namdapha/,id:'aravali',name:'Aravalli, Himalaya & Arunachal Pradesh'},
+      {r:/uttarakhand|devbhoomi|god|ghost/,id:'devbhoomi',name:'Uttarakhand — Devbhoomi'},
+      {r:/determination|sankalp|love/,id:'determination',name:'Our Determination'}
+    ];
+    const route = routes.find(x=>x.r.test(q));
+    if(route) return { text:`Taking you to the <strong>${route.name}</strong> section.`, action:'scrollTo', target:route.id };
+  }
+  if(/(who are you|your name)/.test(rawCmd)) {
+    return { html: mountainKB.find(x=>x.match.toString().includes('who are you'))?.html || 'I am SEVAK IVA.', speakText: 'I am SEVAK IVA, the Intelligent Voice Assistant of the Wisdom of Mountain project, created by Ayush Kumar Jha.' };
+  }
+  if(/(who is your creator|who created you)/.test(rawCmd)) return { text: "My creator is <strong>Ayush Kumar Jha</strong>." };
+  if(/(time|what time)/.test(rawCmd)) return { text: `Sir, the time is ${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})}.` };
+  if(/(date|today)/.test(rawCmd)) return { text: `Sir, today is ${getDateString()}.` };
+  if(/\b(joke)\b/.test(rawCmd)) return { text: getRandomFrom(jokes) };
+  if(/(motivat|quote|inspiration)/.test(rawCmd)) return { text: getRandomFrom(quotes) };
+  if(/(fact|interesting)/.test(rawCmd)) return { text: getRandomFrom(facts) };
+  if(/(flip a coin)/.test(rawCmd)){ const r = Math.random() < 0.5 ? 'Heads' : 'Tails'; return { text: `Sir, the coin says: <strong>${r}</strong>!` }; }
+  if(/(roll a dice|dice)/.test(rawCmd)){ const r = Math.floor(Math.random()*6)+1; return { text: `Sir, the dice shows: <strong>${r}</strong>!` }; }
+  if(/^(show me|show|picture of|image of)\s+(.+)/.test(rawCmd)){
+    const match = rawCmd.match(/^(?:show me|show|picture of|image of)\s+(.+)/);
+    const query = match[1].trim();
+    const wiki = await searchWikipedia(query);
+    const imageToUse = wiki?.thumbnail || wiki?.originalImage || null;
+    if(imageToUse) return { html: `<strong>${wiki.title}</strong><br>${wiki.extract.substring(0,300)}...<br><a href="${wiki.url}" target="_blank">Read more</a>`, image: imageToUse, imageAlt: wiki.title, speakText: `Here is an image of ${query}.` };
+    const commonsImg = await fetchWikimediaImage(query);
+    if(commonsImg) return { html: `<strong>${query}</strong><br>Here is an image.`, image: commonsImg.url, imageAlt: commonsImg.title, speakText: `I found an image of ${query}.` };
+    return { text: `Sir, I couldn't find an image for "${query}".` };
+  }
+  const mountain = await answerMountain(rawCmd);
+  if(mountain) return mountain;
+  if(/(who is|what is|tell me about|explain|define|meaning of)\s+(.+)/.test(rawCmd)){
+    const match = rawCmd.match(/(?:who is|what is|tell me about|explain|define|meaning of)\s+(.+)/);
+    const query = match[1].trim();
+    const wiki = await searchWikipedia(query);
+    if(wiki){
+      const shortExtract = wiki.extract.length > 600 ? wiki.extract.substring(0,600)+'...' : wiki.extract;
+      const img = wiki.thumbnail || wiki.originalImage || null;
+      if(img) return { html: `<strong>${wiki.title}</strong><br>${shortExtract}<br><a href="${wiki.url}" target="_blank">Read more</a>`, image: img, imageAlt: wiki.title, speakText: `Here's what I found about ${query}.` };
+      return { html: `<strong>${wiki.title}</strong><br>${shortExtract}<br><a href="${wiki.url}" target="_blank">Read more</a>`, speakText: `Here's what I found about ${query}.` };
+    } else {
+      const ddg = await fetchDuckDuckGoAnswer(query);
+      if(ddg) return { text: `Sir, from DuckDuckGo: ${ddg}` };
+      return { text: `Sir, I couldn't find reliable information about "${query}".` };
+    }
+  }
+  if(/^(?:search|google|look up)\s+(?:for\s+)?(.+?)$/.test(rawCmd)){
+    const q = rawCmd.match(/^(?:search|google|look up)\s+(?:for\s+)?(.+?)$/)[1].trim();
+    return { text: `Searching Google for "${q}".`, action:'openWebsite', url:`https://www.google.com/search?q=${encodeURIComponent(q)}` };
+  }
+  if(/(?:play|open|search)\s+(.+?)\s+(?:on youtube|youtube)/.test(rawCmd)){
+    const q = rawCmd.match(/(?:play|open|search)\s+(.+?)\s+(?:on youtube|youtube)/)[1].trim();
+    return { text: `Opening YouTube for "${q}".`, action:'openWebsite', url:`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}` };
+  }
+  if(/(?:temperature|weather|temp)\s+(?:in|of)\s+([a-zA-Z\s]+)/.test(rawCmd)){
+    const m1 = rawCmd.match(/(?:temperature|weather|temp)\s+(?:in|of)\s+([a-zA-Z\s]+)/);
+    const city = m1[1].trim(); const w = await getWeather(city);
+    if(w) return { text: `Sir, the weather in ${w.name} is ${w.temp}°C with ${w.condition.toLowerCase()} conditions. Wind speed: ${w.windspeed} km/h.` };
+    return { text: `Sir, I couldn't find weather information for "${city}".` };
+  }
+  const wikiFallback = await searchWikipedia(rawCmd);
+  if(wikiFallback){
+    const img = wikiFallback.thumbnail || wikiFallback.originalImage || null;
+    if(img) return { html:`<strong>${wikiFallback.title}</strong><br>${wikiFallback.extract.substring(0,400)}...<br><a href="${wikiFallback.url}" target="_blank">Read more</a>`, image: img, imageAlt: wikiFallback.title, speakText:`I found this for you.` };
+    return { html:`<strong>${wikiFallback.title}</strong><br>${wikiFallback.extract.substring(0,400)}...<br><a href="${wikiFallback.url}" target="_blank">Read more</a>`, speakText:`I found this for you.` };
+  }
+  return { text: getRandomFrom(apologies) };
+}
+
+sevakSend.addEventListener('click', ()=>{ if(isListening) stopListening(); const cmd = sevakInput.value.trim(); if(cmd) processCommand(cmd); });
+sevakInput.addEventListener('keydown', e=>{ if(e.key === 'Enter'){ e.preventDefault(); if(isListening) stopListening(); const cmd = sevakInput.value.trim(); if(cmd) processCommand(cmd); } });
+sevakMic.addEventListener('click', ()=>{ if(isListening) stopListening(); else startListening(); });
+document.addEventListener('keydown', e=>{
+  if(e.key !== 'Escape') return;
+  if(lightboxOverlay.classList.contains('active')) closeLightbox();
+  else if(fullpageOverlay.classList.contains('active')) closeFullPage();
+  else if(panelOpen) closePanel();
+});
+
+function initSevak(){
+  initVoices();
+  if(synthesis.onvoiceschanged !== undefined) synthesis.onvoiceschanged = initVoices;
+  sevakMessages.innerHTML = '';
+  addSevakMessage('sevak',
+    'Namaste Sir 🙏 I am <strong>SEVAK</strong> — your Wisdom of Mountain guide. I have <strong>complete knowledge</strong> of the project. Ask me anything:<br><br>' +
+    '• <em>"What is the Wisdom of Mountain?"</em> · <em>"What are the four pillars?"</em><br>' +
+    '• <em>"Tell me about the Blessing of the Mountain"</em><br>' +
+    '• <em>"Tell me about the Mystery of the Mountain"</em><br>' +
+    '• <em>"Tell me about the Untouched Beauty"</em><br>' +
+    '• <em>"Tell me about the Meditation of Mountain"</em><br>' +
+    '• <em>"Tell me about Aravali"</em> · <em>"Tell me about Himalaya"</em><br>' +
+    '• <em>"Tell me about Uttarakhand"</em> · <em>"What is Devbhoomi?"</em><br>' +
+    '• <em>"Tell me about the Ganga"</em> · <em>"Tell me about the Yamuna"</em><br>' +
+    '• <em>"What is Dhyan?"</em> · <em>"What is Nirvana?"</em><br><br>' +
+    'Or type <strong>"help"</strong> for the full list.<br><span class="sevak-memory-pill">● COMPLETE MOUNTAIN MEMORY READY</span>'
+  );
+  if(!window.SpeechRecognition && !window.webkitSpeechRecognition){
+    addSevakMessage('sevak', '⚠️ Sir, your browser does not support voice recognition. Please use Chrome or Edge.');
+  }
+}
+
+window.addEventListener('resize', ()=>{ if(pCtx){ particleCanvas.width = window.innerWidth; particleCanvas.height = window.innerHeight; } });
+
+function boot(){
+  initBrightness(); initQuotes(); initParticles(); initScrollReveal();
+  initWheel(); loadWikiImages(); initSevak();
+}
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
+
+})();
+</script>
+</body>
+</html>
